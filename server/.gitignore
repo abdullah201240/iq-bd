@@ -39,3 +39,4 @@ src/**/*.log
 # Ignore uploads or generated assets if applicable
 uploads/
 public/uploads/
+# src/config/config.json
