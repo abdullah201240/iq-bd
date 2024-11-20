@@ -6,6 +6,8 @@ import { ErrorCode } from '../exceptions/root';
 import { loginSchema, signupSchema } from '../schema/admin';
 import { UnprocessableEntity } from '../exceptions/validation';
 import jwt from 'jsonwebtoken';
+import { Admin } from '../models';
+const JWT_SECRET = process.env.JWT_SECRET_KEY || "12sawegg23grr434"; // Fallback to a hardcoded secret if not in env
 
 
 export const createAdmin = async (req: Request, res: Response, next: NextFunction): Promise<any | Response> => {
@@ -49,11 +51,12 @@ return res.status(201).json({ message: 'Admin created successfully', admin: admi
 
 export const login = async (req: Request, res: Response, next: NextFunction): Promise<any | Response> => {
   // Zod validation for request body
-  const result = loginSchema.safeParse(req.body);
+  const validation = loginSchema.safeParse(req.body);
 
   // If validation fails, throw a custom error
-  if (!result.success) {
-    return next(new UnprocessableEntity(result.error.errors, 'Validation Error'));
+  if (!validation.success) {
+
+    return next(new UnprocessableEntity(validation.error.errors, 'Validation Error'));
   }
 
   const { email, password } = req.body;
@@ -62,7 +65,6 @@ export const login = async (req: Request, res: Response, next: NextFunction): Pr
   if (!email || !password) {
     return next(new BadRequestException('All fields are required', ErrorCode.MISSING_FIELDS));
   }
-
   // Find the admin by email
   const admin = await AdminModel(req.app.get('sequelize')).findOne({ where: { email } });
 
@@ -82,7 +84,7 @@ export const login = async (req: Request, res: Response, next: NextFunction): Pr
   // Generate JWT token with the admin's id, email, and role
   const token = jwt.sign(
     { id: admin.id, email: admin.email, role: admin.role },
-    process.env.JWT_SECRET_KEY as string, // Make sure to define JWT_SECRET_KEY in your environment variables
+    JWT_SECRET as string, // Make sure to define JWT_SECRET_KEY in your environment variables
     { expiresIn: '1h' } // Set token expiration time (e.g., 1 hour)
   );
 
@@ -90,5 +92,9 @@ export const login = async (req: Request, res: Response, next: NextFunction): Pr
   return res.status(200).json({ message: 'Login successful', token });
 };
 export const me = async (req: Request, res: Response) => {
-  // res.json(req.admin);  // Now `req.admin` will be recognized by TypeScript
+
+  const reqWithAdmin = req as Request & { admin: Admin }; // Manually cast the request type
+  const { password, ...adminData } = reqWithAdmin.admin; // Now TypeScript knows about `admin`
+  res.json(adminData);
 };
+

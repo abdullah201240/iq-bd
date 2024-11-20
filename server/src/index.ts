@@ -1,4 +1,4 @@
-import express, { NextFunction, Request, Response } from 'express';
+import express from 'express';
 import cors from 'cors';
 import routes from './routes/index';
 import db from './config/sequelize'; // Adjust path
@@ -10,7 +10,7 @@ const app = express();
 const port = parseInt(process.env.PORT || '8080', 10); // Ensure port is a number
 
 app.use(cors({
-  // origin: process.env.CORS_ORIGIN || "http://localhost:3000", // Use environment variable or default to localhost
+  origin: process.env.CORS_ORIGIN || "http://localhost:3000", // Use environment variable or default to localhost
   methods: "GET,POST,PUT,DELETE",
   credentials: true
 }))
