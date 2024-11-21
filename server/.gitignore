@@ -40,3 +40,4 @@ src/**/*.log
 uploads/
 public/uploads/
 # src/config/config.json
+upload/

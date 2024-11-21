@@ -5,7 +5,9 @@ export enum ErrorCode {
     UNAUTHORIZED = 1004, // Explicitly set the error code
     Unprocessable_Entity = 2001,
     MISSING_FIELDS = 1005,
-    Internal_Exception=3001
+    Internal_Exception=3001,
+    ABOUT_RECORD_NOT_FOUND = 1006,
+
 }
 
 export class HttpException extends Error {

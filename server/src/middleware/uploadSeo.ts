@@ -67,7 +67,7 @@ const compressImage = async (filePath: string): Promise<string> => {
 };
 
 // Middleware to compress multiple images concurrently
-const compressImageMiddlewareSeo = async (req: Request, res: Response, next: NextFunction) => {
+const compressImageMiddlewareSeo = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
     if (req.files && typeof req.files === 'object') {
         try {
             const files = req.files as { [fieldname: string]: Express.Multer.File[] };

@@ -31,6 +31,9 @@ const db = new Sequelize(dbConfig.database, dbConfig.username, dbConfig.password
   host: dbConfig.host,
   dialect: dbConfig.dialect as any, // Cast `dialect` to `any` if TypeScript complains
   logging: false,
+  dialectOptions: {
+    connectTimeout: 20000 // 20 seconds timeout
+  },
 
 });
 

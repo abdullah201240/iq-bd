@@ -8,7 +8,6 @@ export interface AdminAttributes {
   email: string;
   password: string;
   phone: string;
-  image?: string;
   dob: string;
   gender: string;
   role: string;
@@ -24,7 +23,6 @@ class Admin extends Model<AdminAttributes, AdminCreationAttributes> implements A
   public email!: string;
   public password!: string;
   public phone!: string;
-  public image?: string;
   public dob!: string;
   public gender!: string;
   public role!: string;
@@ -62,10 +60,7 @@ const AdminModel = (sequelizeInstance: Sequelize): typeof Admin => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      image: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
+      
       dob: {
         type: DataTypes.DATEONLY,
         allowNull: false,

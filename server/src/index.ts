@@ -21,6 +21,7 @@ app.use('/api', routes);
 
 // Error handling middleware should be the last middleware
 app.use(errorMiddleware);
+app.use('/upload', express.static('upload'));
 
 
 db.authenticate()

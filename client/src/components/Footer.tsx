@@ -1,75 +1,153 @@
 import React from 'react';
 import Image from 'next/image';
-import Logo from '@/app/assets/img/icon.webp'
+import Logo from '@/app/assets/img/Logo.webp'
+import Link from 'next/link';
+import { FaMapMarkerAlt, FaEnvelope, FaPhoneAlt } from 'react-icons/fa'
 export default function Footer() {
   return (
     <div>
-      <div className="mt-8 bg-violet-900 pt-9">
-        <div className="mx-auto w-full max-w-[1166px] px-4 xl:px-0">
-          <div className="flex flex-col justify-between sm:px-[18px] md:flex-row md:px-10">
-            <div className="md:w-[316px]">
-              <h1 className="text-[18px] font-medium text-white">
-                <p className="text-white font-extrabold">
+      <footer>
+        <div className="bg-[#101620] py-4 text-white ">
+          <div className="container px-4 mx-auto ">
+            <div className="-mx-4 flex flex-wrap justify-between">
+              <div className=" my-4 w-full sm:w-auto text-white">
 
-                <Image
-                            src={Logo}
-                            alt="IQ LOGO"
-                            fill
-                            sizes="(max-width: 640px) 100px, (max-width: 768px) 120px, 120px"
-                            style={{ objectFit: "contain" }}
-                        />
+              </div>
+              <div className="px-3 my-4 w-full xl:w-1/4">
+                <Link href="/" className="block w-56 mb-10">
+                  <Image
+                    src={Logo}
+                    alt='IQ Logo'
+                    height={60}
+                    width={60}
+
+                  />
+                </Link>
+                <p className="text-justify text-white">
+                  IQ Architects Ltd is known for delivering the best interior design solutions, combining modern architecture with latest trends in home decor & office interior design. Our team of experienced interior designers are passionate about creating functional & visually stunning spaces that reflect our clients needs.
                 </p>
-              </h1>
-              <p className="mt-[18px] text-[15px] font-normal text-white/[80%]">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos, fugit non. Incidunt dolorum adipisci,
-                tempore asperiores nemo odio facere officiis enim animi placeat eaque nesciunt alias beatae id, at dicta.
-              </p>
-             
+                <br />
+                <div  >
+
+                  <Link href="#" className="inline-flex items-center justify-center h-8 w-8 border border-white rounded-full mr-3 hover:text-[#F17B21] hover:border-[#F17B21]"
+                    aria-label="Facebook"
+
+                  >
+                    <svg className="w-4 h-4 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"
+                      role="img"
+                      aria-label="Facebook Icon"
+
+                    >
+                      <path d="M279.14 288l14.22-92.66h-88.91v-60.13c0-25.35 12.42-50.06 52.24-50.06h40.42V6.26S260.43 0 225.36 0c-73.22 0-121.08 44.38-121.08 124.72v70.62H22.89V288h81.39v224h100.17V288z"></path>
+                    </svg>
+                  </Link>
+                  <Link href="#" className="inline-flex items-center justify-center h-8 w-8 border border-white    rounded-full mr-3 hover:text-[#F17B21] hover:border-[#F17B21]"
+                    aria-label="Twitter"
+
+                  >
+                    <svg className="w-4 h-4 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
+                      role="img"
+                      aria-label="Twitter Icon"
+                    >
+                      <path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"></path>
+                    </svg>
+                  </Link>
+                  <Link href="#" className="inline-flex items-center justify-center h-8 w-8 border border-white rounded-full mr-3 hover:text-[#F17B21] hover:border-[#F17B21]"
+                    aria-label="Instagram"
+                  >
+                    <svg className="w-4 h-4 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
+                      role="img"
+                      aria-label="Instagram Icon"
+                    >
+                      <path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"></path>
+                    </svg>
+                  </Link>
+                  <Link href="#" className="inline-flex items-center justify-center h-8 w-8 border border-white rounded-full hover:text-[#F17B21] hover:border-[#F17B21]"
+                    aria-label="YouTube"
+
+                  >
+                    <svg className="w-4 h-4 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"
+                      role="img"
+                      aria-label="You Tube  Icon"
+                    >
+                      <path d="M549.655 124.083c-6.281-23.65-24.787-42.276-48.284-48.597C458.781 64 288 64 288 64S117.22 64 74.629 75.486c-23.497 6.322-42.003 24.947-48.284 48.597-11.412 42.867-11.412 132.305-11.412 132.305s0 89.438 11.412 132.305c6.281 23.65 24.787 41.5 48.284 47.821C117.22 448 288 448 288 448s170.78 0 213.371-11.486c23.497-6.321 42.003-24.171 48.284-47.821 11.412-42.867 11.412-132.305 11.412-132.305s0-89.438-11.412-132.305zm-317.51 213.508V175.185l142.739 81.205-142.739 81.201z"></path>
+                    </svg>
+                  </Link>
+
+
+
+                </div>
+
+
+
+
+
+
+
+              </div>
+
+              <div className="px-3 my-4 w-full sm:w-auto text-white">
+                <div>
+                  <br />
+                  <h2 className="inline-block text-3xl pb-4 mb-4 text-white">Get in touch</h2>
+                </div>
+                <ul className="leading-8 pt-3">
+                  <li>
+                    <FaMapMarkerAlt style={{ color: '#F17B21' }} className="inline-block mr-2 text-white" />
+                    Office address: House-141, <br />&ensp; &ensp; Road-01, Baridhara DOHS, Dhaka
+                  </li>
+
+                  <li className=' pt-2'>
+                    <FaEnvelope style={{ color: '#F17B21' }} className="inline-block mr-2 text-white" />
+                    Email: info@iq-bd.com
+                  </li>
+                  <li className=' pt-2'>
+                    <FaPhoneAlt style={{ color: '#F17B21' }} className="inline-block mr-2 text-white" />
+                    Phone: (+880) 184-1004000
+                  </li>
+                  <li className=' pt-2'>
+                    <FaPhoneAlt style={{ color: '#F17B21' }} className="inline-block mr-2 text-white" />
+                    Phone: (+880) 161-8004000
+                  </li>
+                </ul>
+              </div>
+              <div className="px-3 my-4 w-full sm:w-auto">
+                <div>
+
+                  <h2 className="inline-block text-3xl text-white pb-4 mb-4 pt-5 ">Quick Access</h2>
+                </div>
+                <ul className="leading-8 pt-3">
+                  <li><Link href="#" className="hover:text-[#F17B21]">Home</Link></li>
+                  <li><Link href="#" className="hover:text-[#F17B21]">About Us</Link></li>
+                  <li><Link href="#" className="hover:text-[#F17B21]">Services</Link></li>
+                  <li><Link href="#" className="hover:text-[#F17B21]">Projects</Link></li>
+                  <li><Link href="#" className="hover:text-[#F17B21]">Blog</Link></li>
+                  <li><Link href="#" className="hover:text-[#F17B21]">Contract Us</Link></li>
+
+
+
+
+
+                </ul>
+              </div>
+              <div className=" my-4 w-full sm:w-auto text-white">
+
+              </div>
+
             </div>
-            <div className="md:w-[316px]">
-              <div className="mt-[23px] flex">
-                <div className="flex h-[38px] w-[38px] items-center justify-center rounded-[75%]">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                      d="M20.8472 14.8554L16.4306 12.8764L16.4184 12.8707C16.1892 12.7727 15.939 12.7333 15.6907 12.7562C15.4424 12.7792 15.2037 12.8636 14.9963 13.002C14.9718 13.0181 14.9484 13.0357 14.9259 13.0545L12.6441 14.9998C11.1984 14.2976 9.70595 12.8164 9.00376 11.3895L10.9519 9.07294C10.9706 9.0495 10.9884 9.02606 11.0053 9.00075C11.1407 8.79384 11.2229 8.55667 11.2445 8.31035C11.2661 8.06402 11.2264 7.81618 11.1291 7.58887V7.57762L9.14438 3.15356C9.0157 2.85662 8.79444 2.60926 8.51362 2.44841C8.2328 2.28756 7.9075 2.22184 7.58626 2.26106C6.31592 2.42822 5.14986 3.05209 4.30588 4.01615C3.4619 4.98021 2.99771 6.21852 3.00001 7.49981C3.00001 14.9436 9.05626 20.9998 16.5 20.9998C17.7813 21.0021 19.0196 20.5379 19.9837 19.6939C20.9477 18.85 21.5716 17.6839 21.7388 16.4136C21.7781 16.0924 21.7125 15.7672 21.5518 15.4864C21.3911 15.2056 21.144 14.9843 20.8472 14.8554ZM16.5 19.4998C13.3185 19.4963 10.2682 18.2309 8.01856 15.9813C5.76888 13.7316 4.50348 10.6813 4.50001 7.49981C4.49648 6.58433 4.82631 5.69887 5.42789 5.00879C6.02947 4.3187 6.86167 3.87118 7.76907 3.74981C7.7687 3.75355 7.7687 3.75732 7.76907 3.76106L9.73782 8.16731L7.80001 10.4867C7.78034 10.5093 7.76247 10.5335 7.74657 10.5589C7.60549 10.7754 7.52273 11.0246 7.5063 11.2825C7.48988 11.5404 7.54035 11.7981 7.65282 12.0307C8.5022 13.7679 10.2525 15.5051 12.0084 16.3536C12.2428 16.465 12.502 16.5137 12.7608 16.495C13.0196 16.4762 13.2692 16.3907 13.485 16.2467C13.5091 16.2305 13.5322 16.2129 13.5544 16.1942L15.8334 14.2498L20.2397 16.2232C20.2397 16.2232 20.2472 16.2232 20.25 16.2232C20.1301 17.1319 19.6833 17.9658 18.9931 18.5689C18.3028 19.172 17.4166 19.5029 16.5 19.4998Z"
-                      fill="white"></path>
-                  </svg>
-                </div>
-                <div className="ml-[18px]">
-                  <a href="tel:+911800123444" className="font-Inter text-[14px] font-medium text-white">+91 1800123444</a>
-                  <p className="font-Inter text-[12px] font-medium text-white">Support Number</p>
-                </div>
-              </div>
-              <div className="mt-[23px] flex">
-                <div className="flex h-[38px] w-[38px] items-center justify-center rounded-[75%]">
-                  <svg width="20" height="15" viewBox="0 0 20 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                      d="M19 0H1C0.801088 0 0.610322 0.0790178 0.46967 0.21967C0.329018 0.360322 0.25 0.551088 0.25 0.75V14.25C0.25 14.4489 0.329018 14.6397 0.46967 14.7803C0.610322 14.921 0.801088 14.921 1 14.921H19C19.1989 14.921 19.3897 14.921 19.5303 14.7803C19.671 14.6397 19.75 14.4489 19.75 14.25V0.75C19.75 0.551088 19.671 0.360322 19.5303 0.21967C19.3897 0.0790178 19.1989 0 19 0ZM18 13.25C18 13.6642 17.6642 14 17.25 14H2.75C2.33579 14 2 13.6642 2 13.25V1.75C2 1.33579 2.33579 1 2.75 1H17.25C17.6642 1 18 1.33579 18 1.75V13.25Z"
-                      fill="white"></path>
-                  </svg>
-                </div>
-                <div className="ml-[18px]">
-                  <a href="mailto:help@lorem.com" className="font-Inter text-[14px] font-medium text-[#fff]">help@lorem.com</a>
-                  <p className="font-Inter text-[12px] font-medium text-[#fff]">Support Email</p>
-                </div>
-              </div>
-              <div className="mt-[23px] flex">
-                <div className="flex h-[38px] w-[38px] items-center justify-center rounded-[75%]">
-                  <svg width="18" height="21" viewBox="0 0 18 21" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                      d="M9 4.5C8.25832 4.5 7.5333 4.71993 6.91661 5.13199C6.29992 5.54405 5.83333 6.15511 5.83333 6.83333V11.1667C5.83333 11.8449 6.29992 12.455 6.91661 12.868C7.5333 13.2801 8.25832 13.5 9 13.5C9.74168 13.5 10.4667 13.2801 11.0834 12.868C11.7001 12.455 12.1667 11.8449 12.1667 11.1667V6.83333C12.1667 6.15511 11.7001 5.54405 11.0834 5.13199C10.4667 4.71993 9.74168 4.5 9 4.5ZM9 15.1667C7.93926 15.1667 6.91268 15.5631 6.17157 16.3042C5.43046 17.0453 5.16667 18.0722 5.5 19.0417C5.83333 20.0111 6.92618 20.9291 8.08334 21.0417C9.2405 21.1543 10.4135 20.5711 11.0834 19.8293C11.7533 19.0875 12.0171 18.0546 11.8334 17.0833C11.6497 16.112 10.556 15.1667 9 15.1667Z"
-                      fill="white"></path>
-                  </svg>
-                </div>
-                <div className="ml-[18px]">
-                  <a href="mailto:help@lorem.com" className="font-Inter text-[14px] font-medium text-[#fff]">Sub Nerul, Mumbai, India, 123456</a>
-                  <p className="font-Inter text-[12px] font-medium text-white">Address</p>
-                </div>
+          </div>
+        </div>
+        <div className="bg-[#101620]  ">
+          <div className="container mx-auto text-center max-w-[1330] py-4 text-white border-t border-white">
+            <div className="flex justify-center items-center">
+              <div className="text-center">
+                © Copyright {new Date().getFullYear()} IQ Architects. All rights reserved. | Development by Digirib
               </div>
             </div>
           </div>
         </div>
-      </div>
+
+      </footer>
     </div>
   );
 }
