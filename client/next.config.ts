@@ -3,7 +3,9 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   reactStrictMode: false,
 
-  /* config options here */
+  images: {
+    domains: ['localhost'],  // Add 'localhost' to the domains list
+  },
 };
 
 export default nextConfig;

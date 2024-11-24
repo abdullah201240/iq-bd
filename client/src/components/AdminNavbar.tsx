@@ -2,8 +2,17 @@ import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import Logo from '@/app/assets/img/icon.webp';
+import { useRouter } from "next/navigation"; // For programmatic navigation
 
 export default function AdminNavbar() {
+  const router = useRouter(); // Next.js router for navigation
+  const handleLogout = () => {
+    // Clear authentication data (example: localStorage)
+    localStorage.removeItem("sessionToken");
+
+    // Navigate to login page
+    router.push("/admin/login");
+};
   return (
     <div>
       <button
@@ -84,6 +93,28 @@ export default function AdminNavbar() {
                 </svg>
                 <span className="ms-3">About Us</span>
               </Link>
+
+              <button
+                onClick={handleLogout}
+                className="flex items-center p-2 w-full text-gray-900 rounded-lg hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700 group"
+              >
+                <svg
+                  className="w-5 h-5 text-gray-500 group-hover:text-gray-900 dark:group-hover:text-white"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M3 10a7 7 0 1114 0 7 7 0 01-14 0zm7-4a.75.75 0 00-1.5 0v4.25H6a.75.75 0 000 1.5h3.25V14a.75.75 0 001.5 0v-6.25z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                <span className="ms-3">Logout</span>
+              </button>
+            
+             
             </li>
           </ul>
         </div>

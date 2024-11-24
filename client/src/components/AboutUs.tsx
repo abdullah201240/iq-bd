@@ -1,11 +1,58 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
-import AboutImg from "@/app/assets/img/About.png";
 import Back from '@/app/assets/img/aboutbg.webp';
-
+// Define the interface for the 'aboutInfo' object
+interface AboutInfo {
+  title: string;
+  description: string;
+  homeImage: string;
+  homeVideo: string;
+}
 export default function AboutUs() {
   const [isVideoOpen, setIsVideoOpen] = useState(false);
+  const [aboutInfo, setAboutInfo] = useState<AboutInfo | null>(null);  // Use the interface here
+  const [loading, setLoading] = useState(true);      // State to handle loading state
+  const [error, setError] = useState<string | null>(null); // State to handle any errors
+  const getYouTubeVideoId = (url: string | undefined): string => {
+    if (!url) return "";
+    const urlParams = new URLSearchParams(new URL(url).search);
+    return urlParams.get('v') || ''; // Returns the video ID
+  };
+  // Fetch data inside useEffect
+  useEffect(() => {
+    
+    const fetchAboutInfo = async () => {
+      try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/about/1`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch data');
+        }
+        const data = await response.json();
+        setAboutInfo(data);  // Set the fetched data
+      } catch (err) {
+        console.error(err);  // Log the error for debugging
+        const errorMessage = (err as Error).message;
+
+        setError(errorMessage);
+
+
+
+      } finally {
+        setLoading(false);  // Set loading to false when fetching is complete
+      }
+    };
+
+    fetchAboutInfo(); // Call the fetch function when component mounts
+  }, []);  // Empty dependency array to run only once when the component mounts
+
+  if (loading) {
+    return <div>Loading...</div>; // Show a loading message while fetching data
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>; // Show an error message if there's an issue with the fetch
+  }
 
   return (
     <div
@@ -16,20 +63,11 @@ export default function AboutUs() {
         {/* Left Content */}
         <div className="sm:w-1/2 p-5 sm:p-10 text-center sm:text-left">
           <span className="text-black mt-4 text-4xl">
-            IQ Architects Ltd is the best interior design solutions
+            {aboutInfo?.title || "IQ Architects Ltd is the best interior design solutions"}
           </span>
 
           <p className="mt-4 text-lg text-gray-600 leading-relaxed">
-            Step into IQ Architects Ltd, an oasis of innovative and sustainable
-            architectural designs since 2014. As a premier Interior Design
-            Company situated in Bangladesh, we have forged our path to
-            excellence. Our team, composed of adept architects and designers,
-            is committed to crafting remarkable creations that resonate with our
-            clients. Rooted in the principles of Idea, Innovation, and
-            Inspiration, we dedicate ourselves to bringing your visions to
-            life. Specializing in both residential and commercial architecture,
-            we offer avant-garde solutions for interior Design and exterior
-            design projects.
+            {aboutInfo?.description || "Loading description..."}
           </p>
 
           <div className="mt-6">
@@ -41,21 +79,21 @@ export default function AboutUs() {
               Read More
             </button>
           </div>
-
-
         </div>
 
         {/* Right Image with Play Icon */}
         <div className="sm:w-1/2 p-5 sm:p-10 flex justify-center relative">
           <div className="relative w-full h-80 sm:h-[400px] md:h-[500px]">
-            <Image
-              src={AboutImg}
-              alt="IQ Architects"
-              className="rounded-xl"
-              style={{ objectFit: 'cover' }} // Apply objectFit for proper scaling
-              fill // Ensures the image fills the container
-              sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 25vw" // This sets the image size based on viewport width
-            />
+          {aboutInfo?.homeImage && (
+              <Image
+                src={`${process.env.NEXT_PUBLIC_API_URL_IMAGE}/${aboutInfo.homeImage}`}
+                alt="IQ Architects"
+                className="rounded-xl"
+                style={{ objectFit: 'cover' }} // Apply objectFit for proper scaling
+                fill // Ensures the image fills the container
+                sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 25vw" // This sets the image size based on viewport width
+              />
+            )}
 
             {/* Play Icon */}
             <div
@@ -90,7 +128,8 @@ export default function AboutUs() {
             <iframe
               width="100%"
               height="100%"
-              src="https://www.youtube.com/embed/XO8wew38VM8?autoplay=1"
+              src={`https://www.youtube.com/embed/${getYouTubeVideoId(aboutInfo?.homeVideo)}`}
+
               title="YouTube video player"
               frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

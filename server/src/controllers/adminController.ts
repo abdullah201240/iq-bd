@@ -88,15 +88,28 @@ export const login = async (req: Request, res: Response, next: NextFunction): Pr
     JWT_SECRET as string, // Make sure to define JWT_SECRET_KEY in your environment variables
     { expiresIn: '1h' } // Set token expiration time (e.g., 1 hour)
   );
-
+    // Set the JWT token as a cookie
+    res.cookie('token', token, {
+      httpOnly: true, // Prevents access via JavaScript
+      secure: process.env.NODE_ENV === 'production', // Secure cookie in production only
+      sameSite: 'strict', // Corrected to lowercase "strict"
+    });
+    
   // Send the token in the response
   return res.status(200).json({ message: 'Login successful', token });
 };
 export const me = async (req: Request, res: Response) => {
-
   const reqWithAdmin = req as Request & { admin: Admin }; // Manually cast the request type
-  const { password, ...adminData } = reqWithAdmin.admin; // Now TypeScript knows about `admin`
-  res.json(adminData);
+  const { name, email, phone, dob, gender } = reqWithAdmin.admin.dataValues; // Extract only required fields
+  res.json({ name, email, phone, dob, gender }); // Return only desired fields
+};
+
+// adminController.ts
+export const logout = async (req: Request, res: Response): Promise<any> => {
+  // You can set the token expiration time to a past time, effectively invalidating it
+  res.clearCookie('token');  // If the token is stored as a cookie
+
+  return res.status(200).json({ message: 'Logged out successfully' });
 };
 
 export const aboutUs = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
