@@ -8,6 +8,9 @@ export enum ErrorCode {
     Internal_Exception=3001,
     ABOUT_RECORD_NOT_FOUND = 1006,
     TESTIMONIAL_RECORD_NOT_FOUND = 1007,
+    ADMIN_RECORD_NOT_FOUND = 1008,
+
+
 }
 
 export class HttpException extends Error {

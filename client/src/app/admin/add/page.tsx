@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic';
 import { toast } from 'react-hot-toast';
 
 
-const TestimonialTable = dynamic(() => import('@/components/TestimonialTable'), {
+const AdminTable = dynamic(() => import('@/components/AdminTable'), {
     ssr: false, // Disable SSR for this component
   });
 
@@ -207,7 +207,7 @@ export default function Home() {
       <div className='pb-10'>
        
        
-      <TestimonialTable/>
+      <AdminTable/>
      
       </div>
       

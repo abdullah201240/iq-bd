@@ -114,6 +114,26 @@ export default function AdminNavbar() {
                 </svg>
                 <span className="ms-3">Testimonials</span>
               </Link>
+              <Link
+                href="/admin/add"
+                className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700 group"
+              >
+                <svg
+                  className="w-5 h-5 text-gray-500 group-hover:text-gray-900 dark:group-hover:text-white"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M10 0a1 1 0 011 1v7h7a1 1 0 110 2h-7v7a1 1 0 11-2 0v-7H3a1 1 0 110-2h7V1a1 1 0 011-1z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                <span className="ms-3">Add Admin</span>
+              </Link>
+
             
 
               <button

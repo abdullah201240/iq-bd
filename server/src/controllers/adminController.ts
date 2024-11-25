@@ -51,6 +51,49 @@ export const createAdmin = async (req: Request, res: Response, next: NextFunctio
 };
 
 
+// Delete API
+export const deleteAdmin = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+  const { id } = req.params; // Get the ID of the record from the URL parameters
+
+  const deletedCount = await AdminModel(req.app.get('sequelize')).destroy({
+    where: { id }, // Delete the record by ID
+  });
+
+  if (deletedCount === 0) {
+    return next(new BadRequestException('Admin record not found', ErrorCode.ADMIN_RECORD_NOT_FOUND));
+   
+  }
+
+  return res.status(200).json({ message: 'Admin deleted successfully' });
+};
+// View API (Fetch all Admin records)
+export const viewAdmin = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+  const adminRecords = await AdminModel(req.app.get('sequelize')).findAll();
+
+  if (!adminRecords || adminRecords.length === 0) {
+    return next(new BadRequestException('Admin record not found', ErrorCode.ADMIN_RECORD_NOT_FOUND));
+  }
+
+  return res.status(200).json({ message: 'Fetched adminRecords records successfully', data: adminRecords });
+};
+// View by ID API (Fetch a specific Admin record by ID)
+export const viewAdminById = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+  const { id } = req.params; // Get the ID of the record from the URL parameters
+
+  const adminRecords = await AdminModel(req.app.get('sequelize')).findByPk(id); // Find the record by primary key
+
+  if (!adminRecords) {
+    return next(new BadRequestException(`About record with ID ${id} not found`, ErrorCode.ADMIN_RECORD_NOT_FOUND));
+    
+  }
+
+  return res.status(200).json({ message: 'Fetched About record successfully', data: adminRecords });
+};
+
+
+
+
+
 export const login = async (req: Request, res: Response, next: NextFunction): Promise<any | Response> => {
   // Zod validation for request body
   const validation = loginSchema.safeParse(req.body);
