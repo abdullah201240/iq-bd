@@ -3,11 +3,12 @@ import bcrypt from 'bcryptjs';
 import AdminModel from '../models/admin'; // Adjust the import path as needed
 import { BadRequestException } from '../exceptions/bad-requests';
 import { ErrorCode } from '../exceptions/root';
-import { aboutSchema, loginSchema, signupSchema } from '../schema/admin';
+import { aboutSchema, loginSchema, signupSchema, testimonialSchema } from '../schema/admin';
 import { UnprocessableEntity } from '../exceptions/validation';
 import jwt from 'jsonwebtoken';
 import { Admin } from '../models';
 import AboutModel from '../models/about';
+import TestimonialModel from '../models/testimonial';
 const JWT_SECRET = process.env.JWT_SECRET_KEY || "12sawegg23grr434"; // Fallback to a hardcoded secret if not in env
 
 
@@ -227,4 +228,110 @@ export const viewAboutById = async (req: Request, res: Response, next: NextFunct
   }
 
   return res.status(200).json({ message: 'Fetched About record successfully', data: aboutRecord });
+};
+
+
+
+export const testimonial
+= async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+  const validation = testimonialSchema.safeParse(req.body);
+
+  // If validation fails, throw a custom error
+  if (!validation.success) {
+    return next(new UnprocessableEntity(validation.error.errors, 'Validation Error'));
+  }
+
+  // Destructure the data from the validated body
+  const { title, designation, description} = req.body;
+
+
+  const files = req.files as { [fieldname: string]: Express.Multer.File[] };
+  const image = files['image'] ? files['image'][0].path : ''; // Check if 'image' exists in req.files
+
+  // Create a new "About" record in the database
+  const newTestimonial = await TestimonialModel(req.app.get('sequelize')).create({
+    title,
+    designation,
+    description,
+    image,
+  });
+
+  return res.status(201).json({ message: 'Testimonial created successfully', admin: newTestimonial });
+};
+
+
+// Update API
+export const updateTestimonial = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+  const { id } = req.params; // Get the ID of the record from the URL parameters
+  const validation = testimonialSchema.safeParse(req.body);
+
+  // If validation fails, throw a custom error
+  if (!validation.success) {
+    return next(new UnprocessableEntity(validation.error.errors, 'Validation Error'));
+  }
+  
+  const testimonialRecord = await TestimonialModel(req.app.get('sequelize')).findByPk(id);
+
+  // If record not found, return error
+  if (!testimonialRecord) {
+    return next(new BadRequestException('testimonial record not found', ErrorCode.TESTIMONIAL_RECORD_NOT_FOUND));
+  }
+
+  // Destructure the data from the validated body
+  const { title, description,designation } = req.body;
+
+  const files = req.files as { [fieldname: string]: Express.Multer.File[] };
+
+  const image = files['image'] ? files['image'][0].path : ''; 
+ 
+  testimonialRecord.title = title || testimonialRecord.title;
+  testimonialRecord.description = description || testimonialRecord.description;
+  testimonialRecord.designation = designation || testimonialRecord.designation;
+  testimonialRecord.image = image || testimonialRecord.image;
+
+  // Save the updated record
+  const updatedTestimonial = await testimonialRecord.save();
+
+  return res.status(200).json({ message: 'Testimonial updated successfully', admin: updatedTestimonial });
+};
+
+
+
+// Delete API
+export const deleteTestimonial = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+  const { id } = req.params; // Get the ID of the record from the URL parameters
+
+  const deletedCount = await TestimonialModel(req.app.get('sequelize')).destroy({
+    where: { id }, // Delete the record by ID
+  });
+
+  if (deletedCount === 0) {
+    return next(new BadRequestException('Testimonial record not found', ErrorCode.TESTIMONIAL_RECORD_NOT_FOUND));
+   
+  }
+
+  return res.status(200).json({ message: 'Testimonial deleted successfully' });
+};
+// View API (Fetch all About records)
+export const viewTestimonial = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+  const testimonialRecords = await TestimonialModel(req.app.get('sequelize')).findAll();
+
+  if (!testimonialRecords || testimonialRecords.length === 0) {
+    return next(new BadRequestException('Testimonial record not found', ErrorCode.TESTIMONIAL_RECORD_NOT_FOUND));
+  }
+
+  return res.status(200).json({ message: 'Fetched Testimonial records successfully', data: testimonialRecords });
+};
+// View by ID API (Fetch a specific About record by ID)
+export const viewTestimonialById = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+  const { id } = req.params; // Get the ID of the record from the URL parameters
+
+  const testimonialRecords = await TestimonialModel(req.app.get('sequelize')).findByPk(id); // Find the record by primary key
+
+  if (!testimonialRecords) {
+    return next(new BadRequestException(`Testimonial record with ID ${id} not found`, ErrorCode.TESTIMONIAL_RECORD_NOT_FOUND));
+    
+  }
+
+  return res.status(200).json({ message: 'Fetched Testimonial record successfully', data: testimonialRecords });
 };

@@ -4,8 +4,8 @@ import Image from 'next/image';
 import Back from '@/app/assets/img/aboutbg.webp';
 // Define the interface for the 'aboutInfo' object
 interface AboutInfo {
-  title: string;
-  description: string;
+  homeTitle: string;
+  homeDescription: string;
   homeImage: string;
   homeVideo: string;
 }
@@ -29,6 +29,7 @@ export default function AboutUs() {
           throw new Error('Failed to fetch data');
         }
         const data = await response.json();
+        console.log(data)
         setAboutInfo(data);  // Set the fetched data
       } catch (err) {
         console.error(err);  // Log the error for debugging
@@ -63,11 +64,11 @@ export default function AboutUs() {
         {/* Left Content */}
         <div className="sm:w-1/2 p-5 sm:p-10 text-center sm:text-left">
           <span className="text-black mt-4 text-4xl">
-            {aboutInfo?.title || "IQ Architects Ltd is the best interior design solutions"}
+            {aboutInfo?.homeTitle || "IQ Architects Ltd is the best interior design solutions"}
           </span>
 
           <p className="mt-4 text-lg text-gray-600 leading-relaxed">
-            {aboutInfo?.description || "Loading description..."}
+            {aboutInfo?.homeDescription || "Loading description..."}
           </p>
 
           <div className="mt-6">

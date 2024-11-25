@@ -37,36 +37,12 @@ const upload = multer({
     },
 });
 
-// Image compression function with dynamic quality to target 20-25KB
+// Image compression function
 const compressImage = async (filePath: string) => {
-    const compressedPath = filePath.replace(path.extname(filePath), '.webp');
-    const targetSize = 25 * 1024; // 25 KB target
-    const maxWidth = 800; // Limit width to optimize processing time
-
-    // Set initial quality to 70% to minimize compression iterations
-    let quality = 30;
-
-    // Read image metadata to determine resizing
-    const image = sharp(filePath);
-    const metadata = await image.metadata();
-
-    // Resize only if the width exceeds maxWidth (to reduce processing time)
-    if (metadata.width && metadata.width > maxWidth) {
-        image.resize(maxWidth);
-    }
-
-    let compressedBuffer = await image.webp({ quality }).toBuffer();
-
-    // If the compressed size is still above the target, reduce quality in steps
-    while (compressedBuffer.length > targetSize && quality > 50) {
-        quality -= 10;
-        compressedBuffer = await image.webp({ quality }).toBuffer();
-    }
-
-    // Save the compressed image to disk
-    await sharp(compressedBuffer).toFile(compressedPath);
-
-    // Return the path to the compressed WebP image
+    const compressedPath = filePath.replace(path.extname(filePath), '.jpg');
+    await sharp(filePath)
+        .webp({ quality: 80 }) // Compress the image to 80% quality
+        .toFile(compressedPath);
     return compressedPath;
 };
 

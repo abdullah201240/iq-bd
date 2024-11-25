@@ -77,6 +77,8 @@ export default function AdminNavbar() {
               </Link>
             </li>
 
+
+
             <li>
               <Link
                 href="/admin/aboutUs"
@@ -93,6 +95,26 @@ export default function AdminNavbar() {
                 </svg>
                 <span className="ms-3">About Us</span>
               </Link>
+
+              
+              <Link
+                href="/admin/testimonials"
+                className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700 group"
+              >
+                <svg
+                  className="w-5 h-5 text-gray-500 group-hover:text-gray-900 dark:group-hover:text-white"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    d="M10 0C4.477 0 0 4.477 0 10s4.477 10 10 10 10-4.477 10-10S15.523 0 10 0zm0 18C5.589 18 2 14.411 2 10S5.589 2 10 2s8 3.589 8 8-3.589 8-8 8zm-2-5h4v2H8v-2z"
+                  />
+                </svg>
+                <span className="ms-3">Testimonials</span>
+              </Link>
+            
 
               <button
                 onClick={handleLogout}

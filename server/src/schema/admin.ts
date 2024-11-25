@@ -65,5 +65,17 @@ const aboutSchema = z.object({
     .url('Video must be a valid URL'),
 });
 
+const testimonialSchema  = z.object({
+  title: z.string(),
 
-export { signupSchema, loginSchema,aboutSchema };
+  designation: z.string(),
+
+
+    description: z.string(),
+
+  
+});
+
+
+export { signupSchema, loginSchema,aboutSchema ,testimonialSchema};
+

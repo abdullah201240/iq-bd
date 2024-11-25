@@ -7,7 +7,7 @@ export enum ErrorCode {
     MISSING_FIELDS = 1005,
     Internal_Exception=3001,
     ABOUT_RECORD_NOT_FOUND = 1006,
-
+    TESTIMONIAL_RECORD_NOT_FOUND = 1007,
 }
 
 export class HttpException extends Error {
