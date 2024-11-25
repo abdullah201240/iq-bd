@@ -6,16 +6,21 @@ import { toast } from 'react-hot-toast';
 
 
 const AdminTable = dynamic(() => import('@/components/AdminTable'), {
-    ssr: false, // Disable SSR for this component
-  });
+  ssr: false, // Disable SSR for this component
+});
 
 export default function Home() {
   const router = useRouter();
   const [formData, setFormData] = useState({
-    designation: '',
-    title: '',
-    image: null,
-    description: '',
+    name: '',
+    email: '',
+    phone: '',
+    gender: '',
+    dob: '',
+    role: '',
+
+
+
   });
 
   useEffect(() => {
@@ -42,7 +47,7 @@ export default function Home() {
           return;
         }
 
-       
+
 
       } catch (error) {
         console.error('Error checking session:', error);
@@ -65,14 +70,21 @@ export default function Home() {
 
     try {
       const form = new FormData();
-      form.append('title', formData.title);  // Corrected key for video title
-      form.append('description', formData.description);
-      
-      form.append('designation', formData.designation);
+      form.append('name', formData.name);  // Corrected key for video title
+      form.append('email', formData.email);
 
-      if (formData.image) form.append('image', formData.image);  // Corrected key for video file
+      form.append('phone', formData.phone);
+      form.append('dob', formData.dob);
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/testimonial`, {
+      form.append('gender', formData.gender);
+      form.append('role', formData.role);
+
+
+
+
+
+
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/auth/createAdmin`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${storedUserInfo}`,
@@ -95,25 +107,24 @@ export default function Home() {
     }
   };
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    // Ensure e.target is not null
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const target = e.target;
-
+  
     if (target) {
       const { name, value } = target;
-
+  
       // Type check to ensure 'files' exists only for file input elements
       const newValue = target instanceof HTMLInputElement && target.files
         ? target.files[0] // For file input, use the first file
         : value; // For other inputs (e.g., text), use the input's value
-
+  
       setFormData((prev) => ({
         ...prev,
         [name]: newValue,
       }));
     }
   };
-
+  
 
 
   return (
@@ -125,74 +136,119 @@ export default function Home() {
           </div>
 
           <form onSubmit={handleSubmit} className="mt-10">
-           
-            
+
+
 
 
             <div className="flex gap-4 mb-6">
               <div className="w-1/2">
                 <label htmlFor="Title" className="block text-gray-900 font-semibold mb-2">
-                Name
+                  Name
                 </label>
                 <input
                   id="Name"
                   type="text"
                   name="name"
                   required
-                  value={formData.title}
+                  value={formData.name}
                   onChange={handleChange}
-                  placeholder="Home Video Title"
+                  placeholder="Name"
                   className="w-full p-4 rounded-md border border-gray-400 focus:border-[#F17B21] focus:ring-2 focus:ring-[#F17B21] focus:outline-none placeholder-gray-600 text-gray-900"
                 />
               </div>
               <div className="w-1/2">
                 <label htmlFor="Designation" className="block text-gray-900 font-semibold mb-2">
-                Designation
+                  Email
                 </label>
                 <input
-                  id="designation"
-                  type="text"
-                  name="designation"
+                  id="email"
+                  type="email"
+                  name="email"
                   required
-                  value={formData.designation}
+                  value={formData.email}
                   onChange={handleChange}
-                  placeholder="Designation"
+                  placeholder="Email"
                   className="w-full p-4 rounded-md border border-gray-400 focus:border-[#F17B21] focus:ring-2 focus:ring-[#F17B21] focus:outline-none placeholder-gray-600 text-gray-900"
                 />
               </div>
+
             </div>
 
-            <div className="w-1/2 mb-6">
-              <label htmlFor="image" className="block text-gray-900 font-semibold mb-2">
-                Image
-              </label>
+            <div className="flex gap-4 mb-6">
+              <div className="w-1/2">
+                <label htmlFor="Phone" className="block text-gray-900 font-semibold mb-2">
+                  Phone
+                </label>
+                <input
+                  id="phone"
+                  type="text"
+                  name="phone"
+                  required
+                  value={formData.phone}
+                  onChange={handleChange}
+                  placeholder="Phone"
+                  className="w-full p-4 rounded-md border border-gray-400 focus:border-[#F17B21] focus:ring-2 focus:ring-[#F17B21] focus:outline-none placeholder-gray-600 text-gray-900"
+                />
+              </div>
+              <div className="w-1/2">
+                <label htmlFor="dob" className="block text-gray-900 font-semibold mb-2">
+                  Dob
+                </label>
+                <input
+                  id="dob"
+                  type="date"
+                  name="dob"
+                  required
+                  value={formData.dob}
+                  onChange={handleChange}
+                  placeholder="Dob"
+                  className="w-full p-4 rounded-md border border-gray-400 focus:border-[#F17B21] focus:ring-2 focus:ring-[#F17B21] focus:outline-none placeholder-gray-600 text-gray-900"
+                />
+              </div>
 
-              <input
-                id="image"
-                type="file"
-                name="image"
-                accept="image/*"
-                required
-                onChange={handleChange}
-                className="w-full p-4 rounded-md border border-gray-400 focus:border-[#F17B21] focus:ring-2 focus:ring-[#F17B21] focus:outline-none bg-white text-black file:border file:border-gray-400 file:rounded-md file:bg-white"
-              />
             </div>
 
-            {/* Description */}
-            <div className="mb-6">
-              <label htmlFor="description" className="block text-gray-900 font-semibold mb-2">
-                Description
-              </label>
-              <textarea
-                id="description"
-                name="description"
-                value={formData.description}
-                onChange={handleChange}
-                placeholder="Description"
-                required
-                className="w-full p-4 h-40 rounded-md border border-gray-400 focus:border-[#F17B21] focus:ring-2 focus:ring-[#F17B21] focus:outline-none resize-none placeholder-gray-600 text-gray-900"
-              ></textarea>
+            <div className="flex gap-4 mb-6">
+              <div className="w-1/2">
+                <label htmlFor="Gender" className="block text-gray-900 font-semibold mb-2">
+                  Gender
+                </label>
+                <select
+                  id="gender"
+                  name="gender"
+                  required
+                  value={formData.gender}
+                  onChange={handleChange}
+                  className="w-full p-4 rounded-md border border-gray-400 focus:border-[#F17B21] focus:ring-2 focus:ring-[#F17B21] focus:outline-none placeholder-gray-600 text-gray-900"
+                >
+                  <option value="" disabled>Select Gender</option>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+              <div className="w-1/2">
+                <label htmlFor="role" className="block text-gray-900 font-semibold mb-2">
+                  Role
+                </label>
+                <select
+                  id="role"
+                  name="role"
+                  required
+                  value={formData.role}
+                  onChange={handleChange}
+                  className="w-full p-4 rounded-md border border-gray-400 focus:border-[#F17B21] focus:ring-2 focus:ring-[#F17B21] focus:outline-none placeholder-gray-600 text-gray-900"
+                >
+                  <option value="" disabled>Select Role</option>
+                  <option value="admin">Admin</option>
+                  <option value="editor">Editor</option>
+                  <option value="viewer">Viewer</option>
+                </select>
+              </div>
             </div>
+
+
+
 
             <button
               type="submit"
@@ -202,15 +258,15 @@ export default function Home() {
             </button>
           </form>
         </div>
-        
+
       </div>
       <div className='pb-10'>
-       
-       
-      <AdminTable/>
-     
+
+
+        <AdminTable />
+
       </div>
-      
+
 
     </div>
   );
