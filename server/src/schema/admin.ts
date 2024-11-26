@@ -75,7 +75,14 @@ const testimonialSchema  = z.object({
 
   
 });
+const teamSchema = z.object({
+  name: z.string(),
+  designation: z.string(),
+  email: z.string().email(), // Ensures that the email is in a valid format
+  phone: z.string(),
+  description: z.string(),
+});
 
 
-export { signupSchema, loginSchema,aboutSchema ,testimonialSchema};
+export { signupSchema,teamSchema, loginSchema,aboutSchema ,testimonialSchema};
 

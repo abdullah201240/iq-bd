@@ -1,34 +1,37 @@
+"use client";
 import Image from "next/image";
-
 interface TestimonialCardProps {
-  image: string; // URL of the image
-  name: string;  // Name of the person
-  title: string; // Title or position of the person
-  text: string;  // Testimonial text
+  title: string;
+  description: string;
+  image: string;
+  designation: string;
 }
 
-const TestimonialCard: React.FC<TestimonialCardProps> = ({ image, name, title, text }) => (
-  <div className="flex flex-col items-start p-6 border border-black rounded-lg shadow-md min-h-[200px]">
-    {/* Profile Section: Image, Name, and Title */}
-    <div className="flex items-center space-x-4">
-      {/* Profile Image */}
+const TestimonialCard: React.FC<TestimonialCardProps> = ({ title, description, image, designation }) => {
+  return (
+    <div className="flex flex-col items-start p-6 border border-black rounded-lg shadow-md min-h-[200px]">
+          <div className="flex items-center space-x-4">
+
       <Image
         alt={`${name}'s profile`}
-        src={image}
+        src={`${process.env.NEXT_PUBLIC_API_URL_IMAGE}/${image}`}
         width={64}  // Defined width
         height={64} // Defined height
         className="rounded-full object-cover border-2 border-black"
       />
-      <div>
-        {/* Name and Title */}
-        <p className="text-lg font-semibold text-black">{name}</p> 
-        <p className="text-sm text-black">{title}</p>
+            <div>
+            <p className="text-lg font-semibold text-black">{title}</p> 
+            <p className="text-sm text-black">{designation}</p>
       </div>
     </div>
+    <p className="mt-4 text-center text-black">{description}</p>
+    </div>
 
-    {/* Testimonial Text */}
-    <p className="mt-4 text-center text-black">{text}</p>
-  </div>
-);
+  );
+};
 
 export default TestimonialCard;
+
+
+
+

@@ -1,3 +1,5 @@
+"use client";
+
 import React from 'react';
 import about from '@/app/assets/img/About.webp'; // Correctly imported image
 

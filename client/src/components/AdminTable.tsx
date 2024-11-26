@@ -47,7 +47,7 @@ export default function AdminTable() {
                     return;
                 }
 
-                // Fetching the testimonials data once session is valid
+                // Fetching the admin data once session is valid
                 const adminResponse = await fetch(
                     `${process.env.NEXT_PUBLIC_API_URL}/admin/auth/admin`,
                     {
@@ -62,7 +62,7 @@ export default function AdminTable() {
                     const data = await adminResponse.json(); // Parse response data
                     // Ensure that the data is an array before setting it
                     if (Array.isArray(data.data)) {
-                        setAdmins(data.data); // Update state with the fetched testimonials
+                        setAdmins(data.data); // Update state with the fetched admin
                     } else {
                         console.error('Fetched data is not an array:', data);
                     }
@@ -130,7 +130,7 @@ export default function AdminTable() {
     return (
         <div className="flex justify-center items-center bg-gray-100 px-4">
             <div className="w-full max-w-6xl bg-white shadow-lg rounded-xl p-6">
-                <h1 className="text-center text-4xl">All Testimonials</h1>
+                <h1 className="text-center text-4xl">All Admins</h1>
                 <br />
                 {loading ? (
                     <div className="text-center text-gray-500">Loading...</div>
@@ -182,7 +182,7 @@ export default function AdminTable() {
                                     ))
                                 ) : (
                                     <tr>
-                                        <td colSpan={5} className="p-4 text-center text-gray-500">No testimonials available.</td>
+                                        <td colSpan={5} className="p-4 text-center text-gray-500">No admins available.</td>
                                     </tr>
                                 )}
                             </tbody>

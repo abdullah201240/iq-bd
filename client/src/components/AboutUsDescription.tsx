@@ -28,10 +28,8 @@ export default function AboutUsDescription() {
                     throw new Error('Failed to fetch data');
                 }
                 const data = await response.json();
-                console.log(data)
                 setAboutInfo(data);  // Set the fetched data
             } catch (err) {
-                console.error(err);  // Log the error for debugging
                 const errorMessage = (err as Error).message;
 
                 setError(errorMessage);
@@ -70,7 +68,7 @@ export default function AboutUsDescription() {
                         {aboutInfo?.description || "Loading description..."}
                     </p>
 
-                    
+
                 </div>
 
                 {/* Right Image with Play Icon */}

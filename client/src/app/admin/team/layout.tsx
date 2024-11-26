@@ -1,7 +1,6 @@
 "use client";
-import Footer from "@/components/Footer";
-import Navbar from "@/components/Nabvar";
 
+import AdminNavbar from "@/components/AdminNavbar";
 import { useEffect } from "react";
 
 export default function RootLayout({
@@ -28,9 +27,8 @@ export default function RootLayout({
 
   return (
     <div>
-        <Navbar/>
+        <AdminNavbar/>
       {children}
-      <Footer />
     </div>
   );
 }

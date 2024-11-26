@@ -3,17 +3,18 @@ import bcrypt from 'bcryptjs';
 import AdminModel from '../models/admin'; // Adjust the import path as needed
 import { BadRequestException } from '../exceptions/bad-requests';
 import { ErrorCode } from '../exceptions/root';
-import { aboutSchema, loginSchema, signupSchema, testimonialSchema } from '../schema/admin';
+import { aboutSchema, loginSchema, signupSchema, teamSchema, testimonialSchema } from '../schema/admin';
 import { UnprocessableEntity } from '../exceptions/validation';
 import jwt from 'jsonwebtoken';
 import { Admin } from '../models';
 import AboutModel from '../models/about';
 import TestimonialModel from '../models/testimonial';
+import TeamModel from '../models/team';
 const JWT_SECRET = process.env.JWT_SECRET_KEY || "12sawegg23grr434"; // Fallback to a hardcoded secret if not in env
 
 
 export const createAdmin = async (req: Request, res: Response, next: NextFunction): Promise<any | Response> => {
-
+console.log(req.body)
   const result = signupSchema.safeParse(req.body); // Zod validation
 
   if (!result.success) {
@@ -377,4 +378,117 @@ export const viewTestimonialById = async (req: Request, res: Response, next: Nex
   }
 
   return res.status(200).json({ message: 'Fetched Testimonial record successfully', data: testimonialRecords });
+};
+
+
+
+
+
+
+export const team
+= async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+  const validation = teamSchema.safeParse(req.body);
+
+  // If validation fails, throw a custom error
+  if (!validation.success) {
+    return next(new UnprocessableEntity(validation.error.errors, 'Validation Error'));
+  }
+
+  // Destructure the data from the validated body
+  const { name, designation,email,phone, description} = req.body;
+
+
+  const files = req.files as { [fieldname: string]: Express.Multer.File[] };
+  const image = files['image'] ? files['image'][0].path : ''; // Check if 'image' exists in req.files
+
+  // Create a new "About" record in the database
+  const newTeam = await TeamModel(req.app.get('sequelize')).create({
+    name,
+    designation,
+    email,
+    phone,
+    description,
+    image,
+  });
+
+  return res.status(201).json({ message: 'Team created successfully', admin: newTeam });
+};
+
+
+// Update API
+export const updateTeam = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+  const { id } = req.params; // Get the ID of the record from the URL parameters
+  const validation = teamSchema.safeParse(req.body);
+
+  // If validation fails, throw a custom error
+  if (!validation.success) {
+    return next(new UnprocessableEntity(validation.error.errors, 'Validation Error'));
+  }
+  
+  const teamRecord = await TeamModel(req.app.get('sequelize')).findByPk(id);
+
+  // If record not found, return error
+  if (!teamRecord) {
+    return next(new BadRequestException('testimonial record not found', ErrorCode.TEAM_RECORD_NOT_FOUND));
+  }
+
+  // Destructure the data from the validated body
+  const { name, description,designation,email,phone } = req.body;
+
+  const files = req.files as { [fieldname: string]: Express.Multer.File[] };
+
+  const image = files['image'] ? files['image'][0].path : ''; 
+ 
+  teamRecord.name = name || teamRecord.name;
+  teamRecord.description = description || teamRecord.description;
+  teamRecord.designation = designation || teamRecord.designation;
+  teamRecord.image = image || teamRecord.image;
+  teamRecord.email = email || teamRecord.email;
+  teamRecord.phone = phone || teamRecord.phone;
+
+  // Save the updated record
+  const updatedTeam = await teamRecord.save();
+
+  return res.status(200).json({ message: 'Testimonial updated successfully', admin: updatedTeam });
+};
+
+
+
+// Delete API
+export const deleteTeam  = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+  const { id } = req.params; // Get the ID of the record from the URL parameters
+
+  const deletedCount = await TeamModel(req.app.get('sequelize')).destroy({
+    where: { id }, // Delete the record by ID
+  });
+
+  if (deletedCount === 0) {
+    return next(new BadRequestException('Team record not found', ErrorCode.TEAM_RECORD_NOT_FOUND));
+   
+  }
+
+  return res.status(200).json({ message: 'Team deleted successfully' });
+};
+// View API (Fetch all About records)
+export const viewTeam  = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+  const teamRecords = await TeamModel(req.app.get('sequelize')).findAll();
+
+  if (!teamRecords || teamRecords.length === 0) {
+    return next(new BadRequestException('Team record not found', ErrorCode.TEAM_RECORD_NOT_FOUND));
+  }
+
+  return res.status(200).json({ message: 'Fetched Team records successfully', data: teamRecords });
+};
+// View by ID API (Fetch a specific About record by ID)
+export const viewTeamById = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+  const { id } = req.params; // Get the ID of the record from the URL parameters
+
+  const teamRecords = await TeamModel(req.app.get('sequelize')).findByPk(id); // Find the record by primary key
+
+  if (!teamRecords) {
+    return next(new BadRequestException(`Team record with ID ${id} not found`, ErrorCode.TEAM_RECORD_NOT_FOUND));
+    
+  }
+
+  return res.status(200).json({ message: 'Fetched Team record successfully', data: teamRecords });
 };

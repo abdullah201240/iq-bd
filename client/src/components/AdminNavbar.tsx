@@ -1,3 +1,4 @@
+"use client";
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -41,7 +42,7 @@ export default function AdminNavbar() {
 
       <aside
         id="logo-sidebar"
-        className="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0"
+        className="fixed top-0 left-0 z-40 w-42 h-screen transition-transform -translate-x-full sm:translate-x-0"
         aria-label="Sidebar"
       >
         <div className="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-900">
@@ -132,6 +133,23 @@ export default function AdminNavbar() {
                   />
                 </svg>
                 <span className="ms-3">Add Admin</span>
+              </Link>
+              <Link
+                href="/admin/team"
+                className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700 group"
+              >
+                <svg
+                  className="w-5 h-5 text-gray-500 group-hover:text-gray-900 dark:group-hover:text-white"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    d="M4 4a4 4 0 118 0 4 4 0 01-8 0zm12 0a4 4 0 118 0 4 4 0 01-8 0zm0 8a6 6 0 10-12 0 6 6 0 0012 0z"
+                  />
+                </svg>
+                <span className="ms-3">Team Member</span>
               </Link>
 
             

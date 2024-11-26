@@ -6,7 +6,7 @@ import authMiddleware from '../middleware/auth';
 const router = express.Router();
 
 // Route to create a new admin
-router.post('/createAdmin', errorHandler(createAdmin));
+router.post('/createAdmin',[authMiddleware], errorHandler(createAdmin));
 router.post('/login', errorHandler(login));
 
 router.get('/me',[authMiddleware],errorHandler(me));

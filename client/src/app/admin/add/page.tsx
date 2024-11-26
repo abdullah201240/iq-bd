@@ -10,6 +10,7 @@ const AdminTable = dynamic(() => import('@/components/AdminTable'), {
 });
 
 export default function Home() {
+
   const router = useRouter();
   const [formData, setFormData] = useState({
     name: '',
@@ -18,10 +19,13 @@ export default function Home() {
     gender: '',
     dob: '',
     role: '',
+    password: '',
 
 
 
   });
+  const [passwordValid, setPasswordValid] = useState(false);
+
 
   useEffect(() => {
     const checkSession = async () => {
@@ -58,9 +62,34 @@ export default function Home() {
     checkSession();
   }, [router]);
 
+
+  const validatePassword = (password: string) => {
+    const lengthCondition = password.length >= 8;
+    const upperCaseCondition = /[A-Z]/.test(password);
+    const lowerCaseCondition = /[a-z]/.test(password);
+    const specialCharCondition = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+    const digitCheck = /[0-9]/.test(password); // New condition for at least one digit
+
+
+    return (
+      lengthCondition &&
+      upperCaseCondition &&
+      lowerCaseCondition &&
+      specialCharCondition &&
+      digitCheck
+    );
+  }
+  
+
   // Handling form submission
   const handleSubmit = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
+
+    if (!passwordValid) {
+      toast.error('Password does not meet the required conditions!');
+      return;
+    }
+
     const storedUserInfo = localStorage.getItem('sessionToken');
 
     if (!storedUserInfo) {
@@ -69,29 +98,26 @@ export default function Home() {
     }
 
     try {
-      const form = new FormData();
-      form.append('name', formData.name);  // Corrected key for video title
-      form.append('email', formData.email);
 
-      form.append('phone', formData.phone);
-      form.append('dob', formData.dob);
-
-      form.append('gender', formData.gender);
-      form.append('role', formData.role);
-
-
-
-
-
+      // Prepare JSON data
+    const jsonData = {
+      name: formData.name,
+      email: formData.email,
+      phone: formData.phone,
+      dob: formData.dob,
+      gender: formData.gender,
+      role: formData.role,
+      password: formData.password,
+    };
 
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/auth/createAdmin`, {
         method: 'POST',
         headers: {
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${storedUserInfo}`,
         },
-        body: form,
+        body: JSON.stringify(jsonData),
       });
-      console.log(form)
 
       if (!response.ok) {
         toast.error('Error updating data'); // Displays a success message
@@ -107,24 +133,22 @@ export default function Home() {
     }
   };
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const target = e.target;
-  
-    if (target) {
-      const { name, value } = target;
-  
-      // Type check to ensure 'files' exists only for file input elements
-      const newValue = target instanceof HTMLInputElement && target.files
-        ? target.files[0] // For file input, use the first file
-        : value; // For other inputs (e.g., text), use the input's value
-  
-      setFormData((prev) => ({
-        ...prev,
-        [name]: newValue,
-      }));
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+
+    // Validate password if the field is 'password'
+    if (name === 'password') {
+      setPasswordValid(validatePassword(value));
     }
-  };
-  
+  };;
+
 
 
   return (
@@ -132,7 +156,7 @@ export default function Home() {
       <div className="bg-gray-100 py-12">
         <div className="max-w-3xl mx-auto bg-white border-2 border-[#F17B21] rounded-lg shadow-lg p-8">
           <div className="text-center">
-            <h2 className="text-3xl font-bold text-black">Testimonial</h2>
+            <h2 className="text-3xl font-bold text-black">Admin</h2>
           </div>
 
           <form onSubmit={handleSubmit} className="mt-10">
@@ -245,9 +269,82 @@ export default function Home() {
                   <option value="viewer">Viewer</option>
                 </select>
               </div>
+
+            </div>
+            <div className="w-1/2">
+              <label
+                htmlFor="Password"
+                className="block text-gray-900 font-semibold mb-2"
+              >
+                Password
+              </label>
+              <input
+                id="password"
+                type="password"
+                name="password"
+                required
+                value={formData.password}
+                onChange={handleChange}
+                placeholder="Password"
+                className={`w-full p-4 rounded-md border ${passwordValid
+                    ? 'border-green-500 focus:ring-green-500'
+                    : 'border-red-500 focus:ring-red-500'
+                  } focus:ring-2 focus:outline-none placeholder-gray-600 text-gray-900`}
+              />
             </div>
 
+            <br />
+            <ul className="text-sm text-gray-600">
+              <li
+                className={
+                  formData.password.length >= 8
+                    ? 'text-green-600'
+                    : 'text-red-600'
+                }
+              >
+                Must be at least 8 characters
+              </li>
+              <li
+                className={
+                  /[A-Z]/.test(formData.password)
+                    ? 'text-green-600'
+                    : 'text-red-600'
+                }
+              >
+                Must contain one uppercase letter
+              </li>
+              <li
+                className={
+                  /[a-z]/.test(formData.password)
+                    ? 'text-green-600'
+                    : 'text-red-600'
+                }
+              >
+                Must contain one lowercase letter
+              </li>
+              <li
+                className={
+                  /[!@#$%^&*(),.?":{}|<>]/.test(formData.password)
+                    ? 'text-green-600'
+                    : 'text-red-600'
+                }
+              >
+                Must contain one special character
+              </li>
+              <li
+                className={
+                 /[0-9]/.test(formData.password)
+                    ? 'text-green-600'
+                    : 'text-red-600'
+                }
+              >
+                Must contain at least one digit
+              </li>
 
+              
+            </ul>
+            <br />
+            
 
 
             <button
