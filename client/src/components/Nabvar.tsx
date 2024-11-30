@@ -112,7 +112,7 @@ const Navbar = () => {
                         Home
                     </Link>
                     <Link
-                        href="#"
+                        href="/aboutUs"
                         className="px-3 py-2 text-medium font-medium text-white hover:bg-[#f17b21] hover:text-white rounded-md"
                     >
                         About Us

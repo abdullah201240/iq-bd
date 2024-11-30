@@ -1,34 +1,24 @@
 "use client";
-
-import AdminNavbar from "@/components/AdminNavbar";
-import { useEffect } from "react";
+import "jsvectormap/dist/jsvectormap.css";
+import "flatpickr/dist/flatpickr.min.css";
+import "@/css/satoshi.css";
+import "@/css/style.css";
 
 export default function RootLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode;
-}) {
-  useEffect(() => {
-    document.title = "IQ Architects";
-    const metaDescription = document.querySelector("meta[name='description']");
-    if (metaDescription) {
-      metaDescription.setAttribute(
-        "content",
-        "Discover With Bangladesh's Best Architecture Firm IQ ARCHITECTS LTD for innovative architecture and stunning landscape design. Explore our expertise in planning, decoration, interior, exterior and building design for your dream space."
-      );
-    } else {
-      const meta = document.createElement("meta");
-      meta.name = "description";
-      meta.content =
-        "Discover With Bangladesh's Best Architecture Firm IQ ARCHITECTS LTD for innovative architecture and stunning landscape design. Explore our expertise in planning, decoration, interior, exterior and building design for your dream space.";
-      document.head.appendChild(meta);
-    }
-  }, []);
+}>) {
+
+  
 
   return (
-    <div>
-        <AdminNavbar/>
-      {children}
-    </div>
+    <html lang="en">
+      <body suppressHydrationWarning={true}>
+        <div className="dark:bg-boxdark-2 dark:text-bodydark">
+        {children}
+        </div>
+      </body>
+    </html>
   );
 }

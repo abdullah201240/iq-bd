@@ -3,9 +3,11 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
 import { toast } from 'react-hot-toast';
+import DefaultLayout from "@/components/Layouts/DefaultLayout";
 
 
-const TeamTable = dynamic(() => import('@/components/TeamTable'), {
+
+const TeamTable = dynamic(() => import('@/components/Tables/TeamTable'), {
     ssr: false, // Disable SSR for this component
   });
 
@@ -121,7 +123,8 @@ export default function Home() {
 
 
   return (
-    <div>
+    <>
+        <DefaultLayout>
       <div className="bg-gray-100 py-12">
         <div className="max-w-3xl mx-auto bg-white border-2 border-[#F17B21] rounded-lg shadow-lg p-8">
           <div className="text-center">
@@ -243,14 +246,12 @@ export default function Home() {
         </div>
         
       </div>
-      <div className='pb-10'>
-       
-       
+      
+      
+      {/* <TeamTable/> */}
       <TeamTable/>
      
-      </div>
-      
-
-    </div>
+      </DefaultLayout>
+      </>
   );
 }

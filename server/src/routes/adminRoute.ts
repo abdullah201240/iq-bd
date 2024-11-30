@@ -1,5 +1,5 @@
 import express from 'express';
-import { aboutUs, deleteAbout, deleteTeam, deleteTestimonial, team, testimonial, updateAbout, updateTeam, updateTestimonial, viewAbout, viewAboutById, viewTeam, viewTeamById, viewTestimonial, viewTestimonialById } from '../controllers/adminController'; // Adjust the import path as needed
+import { aboutUs, deleteAbout, deleteServices, deleteTeam, deleteTestimonial, services, team, testimonial, updateAbout, updateServices, updateTeam, updateTestimonial, viewAbout, viewAboutById, viewServices, viewServicesById, viewTeam, viewTeamById, viewTestimonial, viewTestimonialById } from '../controllers/adminController'; // Adjust the import path as needed
 import { errorHandler } from '../error-handler';
 import authMiddleware from '../middleware/auth';
 import { compressImageMiddlewareSeo, uploadSeo } from '../middleware/uploadSeo';
@@ -94,6 +94,39 @@ router.get('/team',authMiddleware, errorHandler(viewTeam));
 // Route for viewing an About record by ID
 router.get('/team/:id',authMiddleware, errorHandler(viewTeamById));
 
+
+
+
+
+
+router.post('/services', 
+  authMiddleware,  
+  uploadSeo.fields([  
+    
+    { name: 'logo', maxCount: 1 },
+    { name: 'image', maxCount: 1 }
+  ]),
+  compressImageMiddlewareSeo,
+  errorHandler(services)  
+);
+// Route for updating an existing About record by ID
+router.put('/services/:id',  uploadSeo.fields([  
+   
+  { name: 'logo', maxCount: 1 },
+  { name: 'image', maxCount: 1 }
+  ]),
+  authMiddleware,
+  compressImageMiddlewareSeo,
+  errorHandler(updateServices));
+
+// Route for deleting an About record by ID
+router.delete('/services/:id', authMiddleware,errorHandler(deleteServices));
+
+// Route for viewing all About records
+router.get('/services',authMiddleware, errorHandler(viewServices));
+
+// Route for viewing an About record by ID
+router.get('/services/:id',authMiddleware, errorHandler(viewServicesById));
 
 
 

@@ -4,7 +4,7 @@ const nextConfig: NextConfig = {
   reactStrictMode: false,
 
   images: {
-    domains: ['localhost','tailwindcss.com']// Add 'localhost' to the domains list
+    domains: ['localhost','tailwindcss.com','192.168.68.188']// Add 'localhost' to the domains list
   },
 };
 

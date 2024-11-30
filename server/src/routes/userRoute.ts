@@ -1,5 +1,5 @@
 import express from 'express';
-import {  viewAboutById, viewTeam, viewTestimonial } from '../controllers/userController'; // Adjust the import path as needed
+import {  viewAboutById, viewTeam, viewTestimonial,viewServices, viewServicesByid } from '../controllers/userController'; // Adjust the import path as needed
 import { errorHandler } from '../error-handler';
 
 const router = express.Router();
@@ -8,6 +8,10 @@ const router = express.Router();
 router.get('/about/:id', errorHandler(viewAboutById));
 router.get('/testimonial', errorHandler(viewTestimonial));
 router.get('/team', errorHandler(viewTeam));
+
+router.get('/servives', errorHandler(viewServices));
+
+router.get('/servives/:id', errorHandler(viewServicesByid));
 
 
 export default router;

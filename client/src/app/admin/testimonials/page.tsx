@@ -3,6 +3,8 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
 import { toast } from 'react-hot-toast';
+import DefaultLayout from "@/components/Layouts/DefaultLayout";
+
 
 
 const TestimonialTable = dynamic(() => import('@/components/TestimonialTable'), {
@@ -117,7 +119,8 @@ export default function Home() {
 
 
   return (
-    <div>
+    <>
+        <DefaultLayout>
       <div className="bg-gray-100 py-12">
         <div className="max-w-3xl mx-auto bg-white border-2 border-[#F17B21] rounded-lg shadow-lg p-8">
           <div className="text-center">
@@ -135,13 +138,13 @@ export default function Home() {
                 Name
                 </label>
                 <input
-                  id="Name"
+                  id="title"
                   type="text"
-                  name="name"
+                  name="title"
                   required
                   value={formData.title}
                   onChange={handleChange}
-                  placeholder="Home Video Title"
+                  placeholder="Name"
                   className="w-full p-4 rounded-md border border-gray-400 focus:border-[#F17B21] focus:ring-2 focus:ring-[#F17B21] focus:outline-none placeholder-gray-600 text-gray-900"
                 />
               </div>
@@ -212,6 +215,8 @@ export default function Home() {
       </div>
       
 
-    </div>
+     
+      </DefaultLayout>
+      </>
   );
 }

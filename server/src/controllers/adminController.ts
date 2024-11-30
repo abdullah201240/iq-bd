@@ -3,13 +3,14 @@ import bcrypt from 'bcryptjs';
 import AdminModel from '../models/admin'; // Adjust the import path as needed
 import { BadRequestException } from '../exceptions/bad-requests';
 import { ErrorCode } from '../exceptions/root';
-import { aboutSchema, loginSchema, signupSchema, teamSchema, testimonialSchema } from '../schema/admin';
+import { aboutSchema, loginSchema, servicesSchema, signupSchema, teamSchema, testimonialSchema } from '../schema/admin';
 import { UnprocessableEntity } from '../exceptions/validation';
 import jwt from 'jsonwebtoken';
 import { Admin } from '../models';
 import AboutModel from '../models/about';
 import TestimonialModel from '../models/testimonial';
 import TeamModel from '../models/team';
+import ServicesModel from '../models/services';
 const JWT_SECRET = process.env.JWT_SECRET_KEY || "12sawegg23grr434"; // Fallback to a hardcoded secret if not in env
 
 
@@ -491,4 +492,117 @@ export const viewTeamById = async (req: Request, res: Response, next: NextFuncti
   }
 
   return res.status(200).json({ message: 'Fetched Team record successfully', data: teamRecords });
+};
+
+
+
+
+
+export const services
+= async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+  const validation = servicesSchema.safeParse(req.body);
+
+  // If validation fails, throw a custom error
+  if (!validation.success) {
+    return next(new UnprocessableEntity(validation.error.errors, 'Validation Error'));
+  }
+
+  // Destructure the data from the validated body
+  const { title, subTitle,mainTitle, description} = req.body;
+
+
+  const files = req.files as { [fieldname: string]: Express.Multer.File[] };
+  const logo = files['logo'] ? files['logo'][0].path : ''; // Check if 'image' exists in req.files
+  const image = files['image'] ? files['image'][0].path : ''; 
+  // Create a new "About" record in the database
+  const newServices = await ServicesModel(req.app.get('sequelize')).create({
+    title,
+    subTitle,
+    mainTitle,
+    logo,
+    description,
+    image,
+  });
+
+  return res.status(201).json({ message: 'Services created successfully', admin: newServices });
+};
+
+
+// Update API
+export const updateServices = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+  const { id } = req.params; // Get the ID of the record from the URL parameters
+  const validation = servicesSchema.safeParse(req.body);
+
+  // If validation fails, throw a custom error
+  if (!validation.success) {
+    return next(new UnprocessableEntity(validation.error.errors, 'Validation Error'));
+  }
+  
+  const servicesRecord = await ServicesModel(req.app.get('sequelize')).findByPk(id);
+
+  // If record not found, return error
+  if (!servicesRecord) {
+    return next(new BadRequestException('testimonial record not found', ErrorCode.SERVICES_RECORD_NOT_FOUND));
+  }
+
+  // Destructure the data from the validated body
+  const { title,subTitle,mainTitle, description} = req.body;
+
+  const files = req.files as { [fieldname: string]: Express.Multer.File[] };
+
+  const logo = files['logo'] ? files['logo'][0].path : ''; // Check if 'image' exists in req.files
+  const image = files['image'] ? files['image'][0].path : '';
+
+  servicesRecord.title = title || servicesRecord.title;
+  servicesRecord.subTitle = subTitle || servicesRecord.subTitle;
+  servicesRecord.mainTitle = mainTitle || servicesRecord.mainTitle;
+  servicesRecord.image = image || servicesRecord.image;
+  servicesRecord.logo = logo || servicesRecord.logo;
+  servicesRecord.description = description || servicesRecord.description;
+
+  // Save the updated record
+  const updatedServices = await servicesRecord.save();
+
+  return res.status(200).json({ message: 'Services updated successfully', admin: updatedServices });
+};
+
+
+
+// Delete API
+export const deleteServices  = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+  const { id } = req.params; // Get the ID of the record from the URL parameters
+
+  const deletedCount = await ServicesModel(req.app.get('sequelize')).destroy({
+    where: { id }, // Delete the record by ID
+  });
+
+  if (deletedCount === 0) {
+    return next(new BadRequestException('Services record not found', ErrorCode.SERVICES_RECORD_NOT_FOUND));
+   
+  }
+
+  return res.status(200).json({ message: 'Services deleted successfully' });
+};
+// View API (Fetch all About records)
+export const viewServices = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+  const servicesRecords = await ServicesModel(req.app.get('sequelize')).findAll();
+
+  if (!servicesRecords || servicesRecords.length === 0) {
+    return next(new BadRequestException('Services record not found', ErrorCode.SERVICES_RECORD_NOT_FOUND));
+  }
+
+  return res.status(200).json({ message: 'Fetched Services records successfully', data: servicesRecords });
+};
+// View by ID API (Fetch a specific About record by ID)
+export const viewServicesById = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+  const { id } = req.params; // Get the ID of the record from the URL parameters
+
+  const servicesRecords = await ServicesModel(req.app.get('sequelize')).findByPk(id); // Find the record by primary key
+
+  if (!servicesRecords) {
+    return next(new BadRequestException(`Services record with ID ${id} not found`, ErrorCode.SERVICES_RECORD_NOT_FOUND));
+    
+  }
+
+  return res.status(200).json({ message: 'Fetched Services record successfully', data: servicesRecords });
 };

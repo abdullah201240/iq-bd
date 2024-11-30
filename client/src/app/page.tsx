@@ -7,6 +7,7 @@ const WeOffer = dynamic(() => import('@/components/WeOffer'));
 const Footer = dynamic(() => import('@/components/Footer'));
 const Navbar = dynamic(() => import('@/components/Nabvar'));
 
+const Services = dynamic(() => import('@/components/Services'));
 
 export default function Home() {
   return (
@@ -15,6 +16,7 @@ export default function Home() {
       <Navbar/>
       <HeroSection/>
       <AboutUs/>
+      <Services/>
       <WeOffer/>
       <Cart />
       <Footer/>

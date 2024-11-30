@@ -4,6 +4,8 @@ import { ErrorCode } from '../exceptions/root';
 import AboutModel from '../models/about';
 import TestimonialModel from '../models/testimonial';
 import TeamModel from '../models/team';
+import ServicesModel from '../models/services';
+import { title } from 'process';
 
 // View by ID API (Fetch a specific About record by ID)
 export const viewAboutById = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
@@ -57,4 +59,48 @@ export const viewTeam = async (req: Request, res: Response, next: NextFunction):
 
     // Send the response with the teams
     res.json(teams);
+};
+
+export const viewServices = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+  const servicesRecords = await ServicesModel(req.app.get('sequelize')).findAll();
+
+  if (!servicesRecords || servicesRecords.length === 0) {
+    return next(new BadRequestException('Services record not found', ErrorCode.SERVICES_RECORD_NOT_FOUND));
+  }
+    // Map through the records and extract the necessary fields (if needed)
+    const teams = servicesRecords.map((record) => ({
+      id: record.id,
+      title: record.title,
+      subTitle: record.subTitle,
+      mainTitle: record.mainTitle,
+      description: record.description,
+      image: record.image,
+      logo: record.logo,
+    }));
+
+    // Send the response with the teams
+    res.json(teams);
+};
+
+export const viewServicesByid = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+  const { id } = req.params; // Get the ID of the record from the URL parameters
+
+  const servicesRecord = await ServicesModel(req.app.get('sequelize')).findByPk(id); // Find the record by primary key
+
+  if (!servicesRecord) {
+    return next(new BadRequestException(`Services record with ID ${id} not found`, ErrorCode.SERVICES_RECORD_NOT_FOUND));
+    
+  }
+
+    // Map through the records and extract the necessary fields (if needed)
+    const team = {
+      title: servicesRecord.title,
+      subTitle: servicesRecord.subTitle,
+      mainTitle: servicesRecord.mainTitle,
+      description: servicesRecord.description,
+      image: servicesRecord.image,
+      logo: servicesRecord.logo,
+    };
+    // Send the response with the teams
+    res.json(team);
 };

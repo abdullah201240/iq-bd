@@ -1,59 +1,19 @@
-'use client';
-import dynamic from 'next/dynamic';
-import Footer from '@/components/Footer';
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import AdminDashboard from "@/components/Dashboard/AdminDashboard";
+import { Metadata } from "next";
+import DefaultLayout from "@/components/Layouts/DefaultLayout";
 
-const Cart = dynamic(() => import('@/components/Cart'));
-const HeroSection = dynamic(() => import('@/components/HeroSection'));
-const AboutUs = dynamic(() => import('@/components/AboutUs'));
-const WeOffer = dynamic(() => import('@/components/WeOffer'));
+export const metadata: Metadata = {
+  title:
+    "Dashboard",
+  description: "Discover with Bangladesh's Best Green Architecture Firm IQ ARCHITECTS LTD for innovative architecture and stunning landscape design. Explore our expertise in planning, decoration, interior, exterior and building design for your dream space.",
+};
 
 export default function Home() {
-  const router = useRouter();
-
-  useEffect(() => {
-    const checkSession = async () => {
-      const storedUserInfo = localStorage.getItem('sessionToken');
-      if (!storedUserInfo) {
-        router.push('/admin/login');
-        return;
-      }
-
-      try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/admin/auth/me`,
-          {
-            method: 'GET',
-            headers: {
-              Authorization: `Bearer ${storedUserInfo}`,
-            },
-          }
-        );
-
-        if (!response.ok) {
-          router.push('/admin/login');
-          return;
-        }
-
-        const result = await response.json();
-        console.log(result); // Handle the response as needed
-      } catch (error) {
-        console.error('Error checking session:', error);
-        router.push('/admin/login');
-      }
-    };
-
-    checkSession();
-  }, [router]);
-
   return (
-    <div>
-      <HeroSection />
-      <AboutUs />
-      <WeOffer />
-      <Cart />
-      <Footer />
-    </div>
+    <>
+      <DefaultLayout>
+        <AdminDashboard />
+      </DefaultLayout>
+    </>
   );
 }

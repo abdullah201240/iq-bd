@@ -22,8 +22,30 @@ app.use(morgan('combined')); // You can change the format as per your needs
 app.use(helmet());
 
 // Enable CORS with specific settings
+// app.use(cors({
+//   origin: process.env.CORS_ORIGIN || "http://localhost:3000", // Use environment variable or default to localhost
+//   methods: "GET,POST,PUT,DELETE",
+//   credentials: true
+// }));
+
 app.use(cors({
-  origin: process.env.CORS_ORIGIN || "http://localhost:3000", // Use environment variable or default to localhost
+  origin: (origin, callback) => {
+    if (!origin) {
+      // Allow requests without an origin header (e.g., from Postman, curl)
+      callback(null, true);
+    } else {
+      const allowedOrigins = [
+        "http://localhost:3000", 
+        "http://192.168.68.188:3000",
+        "http://192.168.68.188:8080"
+      ];
+      if (allowedOrigins.indexOf(origin) !== -1) {
+        callback(null, true); // allow the request
+      } else {
+        callback(new Error('Not allowed by CORS'), false); // reject the request
+      }
+    }
+  },
   methods: "GET,POST,PUT,DELETE",
   credentials: true
 }));
