@@ -14,9 +14,12 @@ const config: Config = {
       satoshi: ["Satoshi", "sans-serif"],
     },
     screens: {
-      "2xsm": "375px",
-      xsm: "425px",
-      "3xl": "2000px",
+      // Custom breakpoints
+      "2xsm": "375px", // Extra small screens
+      xsm: "425px",    // Slightly larger than "2xsm"
+      "3xl": "2000px", // Ultra-wide screens
+
+      // Default breakpoints (inherited from Tailwind)
       ...defaultTheme.screens,
     },
     extend: {
@@ -341,6 +344,7 @@ const config: Config = {
         line3: "line 7s infinite linear",
       },
     },
+   
   },
   plugins: [],
 };

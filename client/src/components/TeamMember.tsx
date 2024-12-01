@@ -47,11 +47,11 @@ export default function TeamMember() {
     return (
         <div className='mx-auto max-w-[1330] '>
 <br/>
-            <h1 className='text-5xl text-center'>Team IQ</h1>
+            <h1 className='text-center mt-12 text-4xl font-medium'>Team IQ</h1>
             <br/>
             
 
-            <p className='pl-28 text-lg'>Meet with our experts</p>
+            <p className='pl-28 text-lg font-medium mt-10'>Meet with our experts</p>
         <div className="flex justify-center py-10 sm:pl-10 mx-auto max-w-[1330]">
             
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-4">

@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Back from '@/app/assets/img/aboutbg.webp';
-// Define the interface for the 'aboutInfo' object
+import Link from 'next/link'
 interface AboutInfo {
   homeTitle: string;
   homeDescription: string;
@@ -72,13 +72,14 @@ export default function AboutUs() {
           </p>
 
           <div className="mt-6">
-            <button className="bg-white dark:bg-white text-black dark:text-black border-2 border-black 
+           <Link href="/aboutUs"> <button className="bg-white dark:bg-white text-black dark:text-black border-2 border-black 
     hover:border-[#f17b21] dark:hover:border-[#f17b21] 
     hover:bg-[#f17b21] dark:hover:bg-[#f17b21] 
     hover:text-white dark:hover:text-white 
     transition-all duration-300 ease-in-out transform hover:scale-105 px-6 py-2 rounded-full">
               Read More
             </button>
+            </Link>
           </div>
         </div>
 

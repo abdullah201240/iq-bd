@@ -19,12 +19,11 @@ export default function Testimonial() {
     // Fetch testimonials from the API
     const fetchTestimonials = async () => {
       try {
-        const response = await fetch('http://localhost:8080/api/user/testimonial');
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/testimonial`);
         const data: Testimonial[] = await response.json();
 
         if (response.ok) {
-          // Assuming data contains 'title', 'description', 'image', 'designation'
-          // Add 'name' and 'text' dynamically to match the TestimonialCardProps
+         
           const modifiedTestimonials = data.map((testimonial) => ({
             ...testimonial,
             name: testimonial.title, // You can adjust this as needed
@@ -60,9 +59,10 @@ export default function Testimonial() {
   return (
     <section className="bg-[#FFCBA3]">
       <div className="mx-auto max-w-screen-xl px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
-        <h2 className="text-center text-3xl font-bold tracking-tight text-black sm:text-3xl">
-          TESTIMONIALS
-        </h2>
+        <h1 className="text-center text-4xl mb-10 tracking-tight text-black sm:text-3xl font-medium">
+          
+          Testimonials
+        </h1>
         <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-8">
           {testimonials.map((testimonial, index) => (
             <TestimonialCard key={index} {...testimonial} />

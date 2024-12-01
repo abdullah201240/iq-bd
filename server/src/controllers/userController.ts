@@ -6,6 +6,9 @@ import TestimonialModel from '../models/testimonial';
 import TeamModel from '../models/team';
 import ServicesModel from '../models/services';
 import { title } from 'process';
+import { contactsSchema } from '../schema/admin';
+import { UnprocessableEntity } from '../exceptions/validation';
+import ContactsModel from '../models/contact';
 
 // View by ID API (Fetch a specific About record by ID)
 export const viewAboutById = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
@@ -103,4 +106,27 @@ export const viewServicesByid = async (req: Request, res: Response, next: NextFu
     };
     // Send the response with the teams
     res.json(team);
+};
+
+export const contacts
+= async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+  const validation = contactsSchema.safeParse(req.body);
+
+  // If validation fails, throw a custom error
+  if (!validation.success) {
+    return next(new UnprocessableEntity(validation.error.errors, 'Validation Error'));
+  }
+
+  // Destructure the data from the validated body
+  const { name, email,phone,subject, description} = req.body;
+
+  const newContacts= await ContactsModel(req.app.get('sequelize')).create({
+    name,
+    email,
+    phone,
+    subject,
+    description,
+  });
+
+  return res.status(201).json({ message: 'Contacts created successfully', user: newContacts });
 };

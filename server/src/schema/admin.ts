@@ -90,5 +90,13 @@ const servicesSchema = z.object({
   description: z.string(),  // Ensures the description is a string
 });
 
-export { signupSchema,servicesSchema,teamSchema, loginSchema,aboutSchema ,testimonialSchema};
+const contactsSchema = z.object({
+  name: z.string(),  // Ensures the title is a string
+  phone: z.string(),  // Ensures the subTitle is a string
+  email: z.string().email(), // Ensures that the email is in a valid format
+  subject: z.string(),  // Ensures the description is a string
+  description: z.string(),  // Ensures the description is a string
+});
+
+export { contactsSchema,signupSchema,servicesSchema,teamSchema, loginSchema,aboutSchema ,testimonialSchema};
 

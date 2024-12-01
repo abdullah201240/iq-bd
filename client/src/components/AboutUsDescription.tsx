@@ -60,11 +60,11 @@ export default function AboutUsDescription() {
             <div className="sm:flex items-center max-w-screen-xl mx-auto bg-white bg-opacity-90 rounded-xl">
                 {/* Left Content */}
                 <div className="sm:w-1/2 p-5 sm:p-10 text-center sm:text-left">
-                    <span className="text-black mt-4 text-4xl">
+                    <span className="text-black  text-4xl font-medium">
                         {aboutInfo?.title || "IQ Architects Ltd is the best interior design solutions"}
                     </span>
 
-                    <p className="mt-4 text-lg text-gray-600 leading-relaxed">
+                    <p className="mt-8 text-lg text-gray-600 leading-relaxed">
                         {aboutInfo?.description || "Loading description..."}
                     </p>
 

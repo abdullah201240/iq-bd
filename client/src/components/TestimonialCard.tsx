@@ -15,8 +15,8 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({ title, description, i
       <Image
         alt={`${name}'s profile`}
         src={`${process.env.NEXT_PUBLIC_API_URL_IMAGE}/${image}`}
-        width={64}  // Defined width
-        height={64} // Defined height
+        width={70}  // Defined width
+        height={70} // Defined height
         className="rounded-full object-cover border-2 border-black"
       />
             <div>

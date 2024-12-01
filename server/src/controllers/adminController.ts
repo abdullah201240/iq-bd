@@ -11,6 +11,7 @@ import AboutModel from '../models/about';
 import TestimonialModel from '../models/testimonial';
 import TeamModel from '../models/team';
 import ServicesModel from '../models/services';
+import ContactsModel from '../models/contact';
 const JWT_SECRET = process.env.JWT_SECRET_KEY || "12sawegg23grr434"; // Fallback to a hardcoded secret if not in env
 
 
@@ -605,4 +606,15 @@ export const viewServicesById = async (req: Request, res: Response, next: NextFu
   }
 
   return res.status(200).json({ message: 'Fetched Services record successfully', data: servicesRecords });
+};
+
+// View API (Fetch all contacts records)
+export const viewContacts = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+  const contactsRecords = await ContactsModel(req.app.get('sequelize')).findAll();
+
+  if (!contactsRecords || contactsRecords.length === 0) {
+    return next(new BadRequestException('Contacts record not found', ErrorCode.CONTACTS_RECORD_NOT_FOUND));
+  }
+
+  return res.status(200).json({ message: 'Fetched Contacts records successfully', data: contactsRecords });
 };

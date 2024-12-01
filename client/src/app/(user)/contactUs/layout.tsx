@@ -10,7 +10,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   useEffect(() => {
-    document.title = "IQ Architects | About Us";
+    document.title = "IQ Architects | Contact Us";
     const metaDescription = document.querySelector("meta[name='description']");
     if (metaDescription) {
       metaDescription.setAttribute(

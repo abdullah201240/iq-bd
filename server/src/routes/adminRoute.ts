@@ -1,5 +1,5 @@
 import express from 'express';
-import { aboutUs, deleteAbout, deleteServices, deleteTeam, deleteTestimonial, services, team, testimonial, updateAbout, updateServices, updateTeam, updateTestimonial, viewAbout, viewAboutById, viewServices, viewServicesById, viewTeam, viewTeamById, viewTestimonial, viewTestimonialById } from '../controllers/adminController'; // Adjust the import path as needed
+import { aboutUs, deleteAbout, deleteServices, deleteTeam, deleteTestimonial, services, team, testimonial, updateAbout, updateServices, updateTeam, updateTestimonial, viewAbout, viewAboutById, viewContacts, viewServices, viewServicesById, viewTeam, viewTeamById, viewTestimonial, viewTestimonialById } from '../controllers/adminController'; // Adjust the import path as needed
 import { errorHandler } from '../error-handler';
 import authMiddleware from '../middleware/auth';
 import { compressImageMiddlewareSeo, uploadSeo } from '../middleware/uploadSeo';
@@ -128,6 +128,7 @@ router.get('/services',authMiddleware, errorHandler(viewServices));
 // Route for viewing an About record by ID
 router.get('/services/:id',authMiddleware, errorHandler(viewServicesById));
 
+router.get('/contacts',authMiddleware, errorHandler(viewContacts));
 
 
 
