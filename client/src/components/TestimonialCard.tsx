@@ -1,4 +1,3 @@
-"use client";
 import Image from "next/image";
 interface TestimonialCardProps {
   title: string;
@@ -13,10 +12,11 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({ title, description, i
           <div className="flex items-center space-x-4">
 
       <Image
-        alt={`${name}'s profile`}
+        alt="image"
         src={`${process.env.NEXT_PUBLIC_API_URL_IMAGE}/${image}`}
         width={70}  // Defined width
         height={70} // Defined height
+      
         className="rounded-full object-cover border-2 border-black"
       />
             <div>

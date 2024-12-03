@@ -1,8 +1,9 @@
 import express from 'express';
-import { aboutUs, deleteAbout, deleteServices, deleteTeam, deleteTestimonial, services, team, testimonial, updateAbout, updateServices, updateTeam, updateTestimonial, viewAbout, viewAboutById, viewContacts, viewServices, viewServicesById, viewTeam, viewTeamById, viewTestimonial, viewTestimonialById } from '../controllers/adminController'; // Adjust the import path as needed
+import { aboutUs, category, createProject, deleteAbout, deleteCategory, deleteServices, deleteTeam, deleteTestimonial, services, team, testimonial, updateAbout, updateServices, updateTeam, updateTestimonial, viewAbout, viewAboutById, viewCategory, viewCategoryById, viewContacts, viewServices, viewServicesById, viewTeam, viewTeamById, viewTestimonial, viewTestimonialById } from '../controllers/adminController'; // Adjust the import path as needed
 import { errorHandler } from '../error-handler';
 import authMiddleware from '../middleware/auth';
 import { compressImageMiddlewareSeo, uploadSeo } from '../middleware/uploadSeo';
+import { convertToWebP, uploadMul } from '../middleware/uploadMiddleware';
 
 const router = express.Router();
 
@@ -94,11 +95,6 @@ router.get('/team',authMiddleware, errorHandler(viewTeam));
 // Route for viewing an About record by ID
 router.get('/team/:id',authMiddleware, errorHandler(viewTeamById));
 
-
-
-
-
-
 router.post('/services', 
   authMiddleware,  
   uploadSeo.fields([  
@@ -130,8 +126,24 @@ router.get('/services/:id',authMiddleware, errorHandler(viewServicesById));
 
 router.get('/contacts',authMiddleware, errorHandler(viewContacts));
 
+router.post('/category', 
+  authMiddleware, 
+  errorHandler(category)  
+);
+router.delete('/category/:id', authMiddleware,errorHandler(deleteCategory));
 
+router.get('/category',authMiddleware, errorHandler(viewCategory));
+router.get('/category/:id',authMiddleware, errorHandler(viewCategoryById));
 
-
+// router.post('/project', 
+//   authMiddleware, uploadSeo.fields([  
+    
+//     { name: 'themeImage', maxCount: 1 },
+   
+//   ]),compressImageMiddlewareSeo,
+//   uploadMul,convertToWebP,
+//   errorHandler(services)  
+// );
+router.post('/createProject', uploadMul,compressImageMiddlewareSeo,errorHandler(createProject));
 
 export default router;

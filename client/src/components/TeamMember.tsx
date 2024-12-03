@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { FaPhoneAlt } from 'react-icons/fa';
@@ -25,7 +27,6 @@ export default function TeamMember() {
                 const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/team`); // Replace with your API URL
                 const data = await response.json();
                 setTeamMembers(data);
-                console.log(data)
             } catch (error) {
                 console.error('Error fetching team data:', error);
             }

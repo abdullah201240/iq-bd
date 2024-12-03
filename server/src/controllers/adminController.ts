@@ -3,15 +3,17 @@ import bcrypt from 'bcryptjs';
 import AdminModel from '../models/admin'; // Adjust the import path as needed
 import { BadRequestException } from '../exceptions/bad-requests';
 import { ErrorCode } from '../exceptions/root';
-import { aboutSchema, loginSchema, servicesSchema, signupSchema, teamSchema, testimonialSchema } from '../schema/admin';
+import { aboutSchema, categorySchema, loginSchema, projectSchema, servicesSchema, signupSchema, teamSchema, testimonialSchema } from '../schema/admin';
 import { UnprocessableEntity } from '../exceptions/validation';
 import jwt from 'jsonwebtoken';
-import { Admin } from '../models';
 import AboutModel from '../models/about';
 import TestimonialModel from '../models/testimonial';
 import TeamModel from '../models/team';
 import ServicesModel from '../models/services';
 import ContactsModel from '../models/contact';
+import ProjectCategoryModel from '../models/projectCategory';
+import Projects from '../models/project';
+import ProjectImage from '../models/projectImage';
 const JWT_SECRET = process.env.JWT_SECRET_KEY || "12sawegg23grr434"; // Fallback to a hardcoded secret if not in env
 
 
@@ -29,7 +31,7 @@ console.log(req.body)
   }
 
   // Check if admin already exists
-  const existingAdmin = await AdminModel(req.app.get('sequelize')).findOne({ where: { email } });
+  const existingAdmin = await AdminModel.findOne({ where: { email } });
   if (existingAdmin) {
     return next(new BadRequestException('Admin already exists', ErrorCode.ADMIN_ALREADY_EXISTS));
   }
@@ -37,7 +39,7 @@ console.log(req.body)
   const hashedPassword = await bcrypt.hash(password, 10);
 
   // Create the new admin in the database
-  const newAdmin = await AdminModel(req.app.get('sequelize')).create({
+  const newAdmin = await AdminModel.create({
     name,
     email,
     password: hashedPassword,
@@ -58,7 +60,7 @@ console.log(req.body)
 export const deleteAdmin = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
   const { id } = req.params; // Get the ID of the record from the URL parameters
 
-  const deletedCount = await AdminModel(req.app.get('sequelize')).destroy({
+  const deletedCount = await AdminModel.destroy({
     where: { id }, // Delete the record by ID
   });
 
@@ -71,7 +73,7 @@ export const deleteAdmin = async (req: Request, res: Response, next: NextFunctio
 };
 // View API (Fetch all Admin records)
 export const viewAdmin = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
-  const adminRecords = await AdminModel(req.app.get('sequelize')).findAll();
+  const adminRecords = await AdminModel.findAll();
 
   if (!adminRecords || adminRecords.length === 0) {
     return next(new BadRequestException('Admin record not found', ErrorCode.ADMIN_RECORD_NOT_FOUND));
@@ -83,7 +85,7 @@ export const viewAdmin = async (req: Request, res: Response, next: NextFunction)
 export const viewAdminById = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
   const { id } = req.params; // Get the ID of the record from the URL parameters
 
-  const adminRecords = await AdminModel(req.app.get('sequelize')).findByPk(id); // Find the record by primary key
+  const adminRecords = await AdminModel.findByPk(id); // Find the record by primary key
 
   if (!adminRecords) {
     return next(new BadRequestException(`About record with ID ${id} not found`, ErrorCode.ADMIN_RECORD_NOT_FOUND));
@@ -114,7 +116,7 @@ export const login = async (req: Request, res: Response, next: NextFunction): Pr
     return next(new BadRequestException('All fields are required', ErrorCode.MISSING_FIELDS));
   }
   // Find the admin by email
-  const admin = await AdminModel(req.app.get('sequelize')).findOne({ where: { email } });
+  const admin = await AdminModel.findOne({ where: { email } });
 
   // If the admin doesn't exist, throw an error
   if (!admin) {
@@ -146,7 +148,7 @@ export const login = async (req: Request, res: Response, next: NextFunction): Pr
   return res.status(200).json({ message: 'Login successful', token });
 };
 export const me = async (req: Request, res: Response) => {
-  const reqWithAdmin = req as Request & { admin: Admin }; // Manually cast the request type
+  const reqWithAdmin = req as Request & { admin: AdminModel }; // Manually cast the request type
   const { name, email, phone, dob, gender } = reqWithAdmin.admin.dataValues; // Extract only required fields
   res.json({ name, email, phone, dob, gender }); // Return only desired fields
 };
@@ -618,3 +620,133 @@ export const viewContacts = async (req: Request, res: Response, next: NextFuncti
 
   return res.status(200).json({ message: 'Fetched Contacts records successfully', data: contactsRecords });
 };
+
+
+
+export const category
+= async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+  const validation = categorySchema.safeParse(req.body);
+
+  // If validation fails, throw a custom error
+  if (!validation.success) {
+    return next(new UnprocessableEntity(validation.error.errors, 'Validation Error'));
+  }
+
+  // Destructure the data from the validated body
+  const { name} = req.body; 
+  // Create a new "About" record in the database
+  const newCategory = await ProjectCategoryModel.create({
+    name
+  });
+
+  return res.status(201).json({ message: 'Category created successfully', admin: newCategory });
+};
+
+export const deleteCategory  = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+  const { id } = req.params; // Get the ID of the record from the URL parameters
+
+  const deletedCount = await ProjectCategoryModel.destroy({
+    where: { id }, // Delete the record by ID
+  });
+
+  if (deletedCount === 0) {
+    return next(new BadRequestException('Category record not found', ErrorCode.CATEGORY_RECORD_NOT_FOUND));
+   
+  }
+
+  return res.status(200).json({ message: 'Category deleted successfully' });
+};
+
+// View API (Fetch all About records)
+export const viewCategory = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+  const categoryRecords = await ProjectCategoryModel.findAll();
+
+  // if (!categoryRecords || categoryRecords.length === 0) {
+  //   return next(new BadRequestException('Services record not found', ErrorCode.CATEGORY_RECORD_NOT_FOUND));
+  // }
+
+  return res.status(200).json({ message: 'Fetched category records successfully', data: categoryRecords });
+};
+
+// View by ID API (Fetch a specific About record by ID)
+export const viewCategoryById = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+  const { id } = req.params; // Get the ID of the record from the URL parameters
+
+  const categoryRecords = await ProjectCategoryModel.findByPk(id); // Find the record by primary key
+
+  if (!categoryRecords) {
+    return next(new BadRequestException(`category record with ID ${id} not found`, ErrorCode.CATEGORY_RECORD_NOT_FOUND));
+    
+  }
+
+  return res.status(200).json({ message: 'Fetched category record successfully', data: categoryRecords });
+};
+
+
+
+
+
+export const createProject = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+  try {
+    // Validate the incoming request body
+    const validation = projectSchema.safeParse(req.body);
+    if (!validation.success) {
+      return next(new UnprocessableEntity(validation.error.errors, 'Validation Error'));
+    }
+
+    const { name, categoryId } = req.body;
+
+    // Ensure `req.files` is either an object or array, and handle accordingly
+    const files = req.files;
+
+    if (!files) {
+      return next(new Error('No files uploaded'));
+    }
+
+    let themeImage = '';
+    let additionalFiles: Express.Multer.File[] = [];
+
+    // Check if `files` is an array (for multiple files in one field)
+    if (Array.isArray(files)) {
+      themeImage = files.length > 0 ? files[0].path : '';  // First image as theme image
+      additionalFiles = files.slice(1);  // Rest as additional images
+    } else {
+      // Check if it's an object (for multiple fields with different file names)
+      const themeImageFile = files['themeImage'] as Express.Multer.File[] | undefined;
+      const additionalFilesField = files['images'] as Express.Multer.File[] | undefined;
+
+      themeImage = themeImageFile && themeImageFile.length > 0 ? themeImageFile[0].path : '';  // Single theme image
+      additionalFiles = additionalFilesField || [];  // Multiple additional images (if any)
+    }
+
+    // Create the new project
+    const project = await Projects.create({
+      name,
+      themeImage,
+      categoryId,
+    });
+
+    // If there are additional images, bulk insert them
+    if (additionalFiles.length > 0) {
+      const imageRecords = additionalFiles.map((file) => ({
+        imageName: file.filename,  // Assuming multer provides the filename
+        projectId: project.id,     // Associate images with the project
+      }));
+
+      await ProjectImage.bulkCreate(imageRecords);
+    }
+
+    // Respond with the created project and a success message
+    res.status(201).json({
+      message: 'Project created successfully',
+      project,
+      images: additionalFiles.map((file) => file.filename),
+    });
+
+  } catch (error) {
+    // Handle any unexpected errors
+    console.error(error);
+    return next(new Error('Internal Server Error'));
+  }
+};
+

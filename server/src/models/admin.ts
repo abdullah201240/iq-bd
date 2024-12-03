@@ -2,7 +2,7 @@ import { Sequelize, DataTypes, Model, Optional } from 'sequelize';
 import db from '../config/sequelize'; // Adjust path as needed
 
 // Define the attributes for the Admin model
-export interface AdminAttributes {
+interface AdminAttributes {
   id: number;
   name: string;
   email: string;
@@ -13,8 +13,7 @@ export interface AdminAttributes {
   role: string;
 }
 
-// Specify which attributes are optional for model creation
-export interface AdminCreationAttributes extends Optional<AdminAttributes, 'id'> {}
+interface AdminCreationAttributes extends Optional<AdminAttributes, 'id'> {}
 
 // Define the Admin model class
 class Admin extends Model<AdminAttributes, AdminCreationAttributes> implements AdminAttributes {
@@ -30,8 +29,6 @@ class Admin extends Model<AdminAttributes, AdminCreationAttributes> implements A
   // Add any instance-level methods here if needed
 }
 
-// Initialize the Admin model
-const AdminModel = (sequelizeInstance: Sequelize): typeof Admin => {
   Admin.init(
     {
       id: {
@@ -82,7 +79,6 @@ const AdminModel = (sequelizeInstance: Sequelize): typeof Admin => {
     }
   );
 
-  return Admin;
-};
+  
 
-export default AdminModel;
+export default Admin;

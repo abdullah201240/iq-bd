@@ -1,26 +1,13 @@
-"use client";
 
-import dynamic from 'next/dynamic';
 
 // AboutUsTitle and Footer are static, so we can import them normally
+import AboutUsDescription from '@/components/AboutUsDescription';
 import AboutUsTitle from '@/components/AboutUsTitle';
+import TeamMember from '@/components/TeamMember';
+import Testimonial from '@/components/Testimonial';
 
 // Dynamically load other components that are not critical for initial rendering
-const Testimonial = dynamic(() => import('@/components/Testimonial'), { 
-  ssr: false, 
-  loading: () => <div>Loading Testimonial...</div> 
-});
 
-const AboutUsDescription = dynamic(() => import('@/components/AboutUsDescription'), { 
-  ssr: false, 
-  loading: () => <div>Loading Description...</div> 
-});
-
-
-const TeamMember = dynamic(() => import('@/components/TeamMember'), { 
-  ssr: false, 
-  loading: () => <div>Loading TeamMember...</div> 
-});
 
 export default function Home() {
   return (

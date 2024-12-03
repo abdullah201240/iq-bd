@@ -23,7 +23,7 @@ const authMiddleware = async (req: Request, res: Response, next: NextFunction) =
     }
 
     // Find the admin using the decoded ID
-    const admin = await AdminModel(req.app.get("sequelize")).findOne({ where: { id: payload.id } });
+    const admin = await AdminModel.findOne({ where: { id: payload.id } });
 
     if (!admin) {
       return next(new UnauthorizedException('Admin not found or invalid token', null, ErrorCode.UNAUTHORIZED));

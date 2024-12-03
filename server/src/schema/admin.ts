@@ -97,6 +97,15 @@ const contactsSchema = z.object({
   subject: z.string(),  // Ensures the description is a string
   description: z.string(),  // Ensures the description is a string
 });
+const categorySchema = z.object({
+  name: z.string(),  // Ensures the title is a string
+ 
+});
 
-export { contactsSchema,signupSchema,servicesSchema,teamSchema, loginSchema,aboutSchema ,testimonialSchema};
+const projectSchema = z.object({
+  name: z.string(), 
+  categoryId: z.string(),  
+});
+
+export {projectSchema,categorySchema, contactsSchema,signupSchema,servicesSchema,teamSchema, loginSchema,aboutSchema ,testimonialSchema};
 
