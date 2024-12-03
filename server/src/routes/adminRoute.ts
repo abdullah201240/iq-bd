@@ -1,5 +1,5 @@
 import express from 'express';
-import { aboutUs, category, createProject, deleteAbout, deleteCategory, deleteServices, deleteTeam, deleteTestimonial, services, team, testimonial, updateAbout, updateServices, updateTeam, updateTestimonial, viewAbout, viewAboutById, viewCategory, viewCategoryById, viewContacts, viewServices, viewServicesById, viewTeam, viewTeamById, viewTestimonial, viewTestimonialById } from '../controllers/adminController'; // Adjust the import path as needed
+import { aboutUs, category, createProject, deleteAbout, deleteCategory, deleteServices, deleteTeam, deleteTestimonial, services, team, testimonial, updateAbout, updateServices, updateTeam, updateTestimonial, viewAbout, viewAboutById, viewCategory, viewCategoryById, viewContacts, viewProjects, viewServices, viewServicesById, viewTeam, viewTeamById, viewTestimonial, viewTestimonialById } from '../controllers/adminController'; // Adjust the import path as needed
 import { errorHandler } from '../error-handler';
 import authMiddleware from '../middleware/auth';
 import { compressImageMiddlewareSeo, uploadSeo } from '../middleware/uploadSeo';
@@ -135,15 +135,10 @@ router.delete('/category/:id', authMiddleware,errorHandler(deleteCategory));
 router.get('/category',authMiddleware, errorHandler(viewCategory));
 router.get('/category/:id',authMiddleware, errorHandler(viewCategoryById));
 
-// router.post('/project', 
-//   authMiddleware, uploadSeo.fields([  
-    
-//     { name: 'themeImage', maxCount: 1 },
-   
-//   ]),compressImageMiddlewareSeo,
-//   uploadMul,convertToWebP,
-//   errorHandler(services)  
-// );
-router.post('/createProject', uploadMul,compressImageMiddlewareSeo,errorHandler(createProject));
+
+router.post('/createProject',authMiddleware, uploadMul,compressImageMiddlewareSeo,errorHandler(createProject));
+router.get('/projects',authMiddleware, errorHandler(viewProjects));
+
+
 
 export default router;

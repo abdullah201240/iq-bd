@@ -1,6 +1,7 @@
 import { Model, DataTypes, Optional } from 'sequelize';
 import db from '../config/sequelize';  // Sequelize instance
 import ProjectCategory from './projectCategory';  // Import ProjectCategory
+import ProjectImage from './projectImage';
 
 // Define the attributes for the Projects model
 interface ProjectAttributes {
@@ -21,6 +22,7 @@ class Projects extends Model<ProjectAttributes, ProjectCreationAttributes> imple
 
   // Relationships
   public readonly category?: ProjectCategory;
+  public readonly images?: ProjectImage[];
 }
 
 Projects.init(
@@ -52,10 +54,14 @@ Projects.init(
   }
 );
 
+Projects.hasMany(ProjectImage, { foreignKey: 'projectId', as: 'project' });
+
 // Associations
 Projects.belongsTo(ProjectCategory, {
   foreignKey: 'categoryId',
   as: 'category',
 });
+
+
 
 export default Projects;

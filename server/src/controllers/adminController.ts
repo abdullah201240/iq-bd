@@ -14,6 +14,7 @@ import ContactsModel from '../models/contact';
 import ProjectCategoryModel from '../models/projectCategory';
 import Projects from '../models/project';
 import ProjectImage from '../models/projectImage';
+import ProjectCategory from '../models/projectCategory';
 const JWT_SECRET = process.env.JWT_SECRET_KEY || "12sawegg23grr434"; // Fallback to a hardcoded secret if not in env
 
 
@@ -687,12 +688,18 @@ export const viewCategoryById = async (req: Request, res: Response, next: NextFu
 
 
 export const createProject = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
-  try {
+  console.log("oakau")
+
+
+    console.log(req.body)
+  
     // Validate the incoming request body
     const validation = projectSchema.safeParse(req.body);
     if (!validation.success) {
       return next(new UnprocessableEntity(validation.error.errors, 'Validation Error'));
     }
+
+    
 
     const { name, categoryId } = req.body;
 
@@ -742,11 +749,38 @@ export const createProject = async (req: Request, res: Response, next: NextFunct
       project,
       images: additionalFiles.map((file) => file.filename),
     });
-
-  } catch (error) {
-    // Handle any unexpected errors
-    console.error(error);
-    return next(new Error('Internal Server Error'));
-  }
 };
 
+export const viewProjects = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+  try {
+    // Fetch all projects with associated project images and categories
+    const projects = await Projects.findAll({
+      include: [
+        {
+          model: ProjectCategory,
+          as: 'category', // Alias for the related category
+          attributes: ['name'], // Only include the name from ProjectCategory
+        },
+        {
+          model: ProjectImage,
+          as: 'project', // Alias for the related category
+          attributes: ['imageName'], // Only include the name from ProjectCategory
+        },
+        
+        
+      ],
+    });
+
+    // Send the response
+    res.status(200).json({
+      message: 'Projects retrieved successfully',
+      data: projects,  // Use 'data' key to encapsulate the projects data
+    });
+  } catch (error) {
+    // Handle any errors that occur during the query
+    console.error(error);
+    res.status(500).json({
+      message: 'Failed to retrieve projects',
+    });
+  }
+};

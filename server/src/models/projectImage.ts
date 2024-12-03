@@ -9,7 +9,6 @@ interface ProjectImageAttributes {
   projectId: number; // Foreign key reference to Projects
 }
 
-// Define the attributes required for creation (without the 'id' field)
 interface ProjectImageCreationAttributes extends Optional<ProjectImageAttributes, 'id'> {}
 
 class ProjectImage extends Model<ProjectImageAttributes, ProjectImageCreationAttributes> implements ProjectImageAttributes {
@@ -17,8 +16,7 @@ class ProjectImage extends Model<ProjectImageAttributes, ProjectImageCreationAtt
   public imageName!: string;
   public projectId!: number;
 
-  // Relationships
-  public readonly project?: Projects;
+  public readonly project?: Projects; // Association with Project
 }
 
 ProjectImage.init(
@@ -45,5 +43,9 @@ ProjectImage.init(
     timestamps: true,
   }
 );
+
+
+// ProjectImage.belongsTo(Projects, { foreignKey: 'projectId', as: 'project' });
+
 
 export default ProjectImage;
