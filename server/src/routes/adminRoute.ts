@@ -1,5 +1,5 @@
 import express from 'express';
-import { aboutUs, category, createProject, deleteAbout, deleteCategory, deleteServices, deleteTeam, deleteTestimonial, services, team, testimonial, updateAbout, updateServices, updateTeam, updateTestimonial, viewAbout, viewAboutById, viewCategory, viewCategoryById, viewContacts, viewProjects, viewServices, viewServicesById, viewTeam, viewTeamById, viewTestimonial, viewTestimonialById } from '../controllers/adminController'; // Adjust the import path as needed
+import { aboutUs, category, createProject, deleteAbout, deleteCategory, deleteServices, deleteTeam, deleteTestimonial, deleteWeAchieved, services, team, testimonial, updateAbout, updateServices, updateTeam, updateTestimonial, updateWeAchieved, viewAbout, viewAboutById, viewCategory, viewCategoryById, viewContacts, viewProjects, viewServices, viewServicesById, viewTeam, viewTeamById, viewTestimonial, viewTestimonialById, viewWeAchieved, viewWeAchievedById, weAchieved } from '../controllers/adminController'; // Adjust the import path as needed
 import { errorHandler } from '../error-handler';
 import authMiddleware from '../middleware/auth';
 import { compressImageMiddlewareSeo, uploadSeo } from '../middleware/uploadSeo';
@@ -139,6 +139,25 @@ router.get('/category/:id',authMiddleware, errorHandler(viewCategoryById));
 router.post('/createProject',authMiddleware, uploadMul,compressImageMiddlewareSeo,errorHandler(createProject));
 router.get('/projects',authMiddleware, errorHandler(viewProjects));
 
+router.post('/weAchieved', 
+  authMiddleware, 
+  uploadSeo.fields([ 
+    { name: 'image', maxCount: 1 }
+  ]),
+  compressImageMiddlewareSeo,
+  errorHandler(weAchieved)  
+);
+router.get('/viewWeAchieved',authMiddleware, errorHandler(viewWeAchieved));
 
+router.get('/viewWeAchieved/:id',authMiddleware, errorHandler(viewWeAchievedById));
+router.put('/weAchieved/:id',  uploadSeo.fields([  
+   
+  { name: 'image', maxCount: 1 }
+]),
+authMiddleware,
+compressImageMiddlewareSeo,
+errorHandler(updateWeAchieved));
+
+router.delete('/deleteWeAchieved/:id', authMiddleware,errorHandler(deleteWeAchieved));
 
 export default router;

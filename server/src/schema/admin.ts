@@ -107,5 +107,14 @@ const projectSchema = z.object({
   categoryId: z.string(),  
 });
 
-export {projectSchema,categorySchema, contactsSchema,signupSchema,servicesSchema,teamSchema, loginSchema,aboutSchema ,testimonialSchema};
+
+
+const weAchievedSchema = z.object({
+  title: z.string(), 
+  subTitle: z.string(),  
+  date: z.string(),  
+
+});
+
+export { weAchievedSchema,projectSchema,categorySchema, contactsSchema,signupSchema,servicesSchema,teamSchema, loginSchema,aboutSchema ,testimonialSchema};
 

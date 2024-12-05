@@ -10,6 +10,7 @@ import { contactsSchema } from '../schema/admin';
 import { UnprocessableEntity } from '../exceptions/validation';
 import ContactsModel from '../models/contact';
 import ProjectImage from '../models/projectImage';
+import WeAchieved from '../models/weAchieved';
 
 // View by ID API (Fetch a specific About record by ID)
 export const viewAboutById = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
@@ -145,4 +146,16 @@ export const viewAllProjectImage = async (req: Request, res: Response, next: Nex
   } catch (error) {
     next(error); // Ensure to handle any errors that occur during the DB query
   }
+};
+
+
+export const viewWeAchieved = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+  const WeAchievedRecords = await WeAchieved.findAll({
+
+    attributes: ['id', 'title','subTitle','date','image']
+  });
+
+  
+
+  return res.status(200).json({ message: 'Fetched We Achieved records successfully', data: WeAchievedRecords });
 };

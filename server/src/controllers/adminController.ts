@@ -3,7 +3,7 @@ import bcrypt from 'bcryptjs';
 import AdminModel from '../models/admin'; // Adjust the import path as needed
 import { BadRequestException } from '../exceptions/bad-requests';
 import { ErrorCode } from '../exceptions/root';
-import { aboutSchema, categorySchema, loginSchema, projectSchema, servicesSchema, signupSchema, teamSchema, testimonialSchema } from '../schema/admin';
+import { aboutSchema, categorySchema, loginSchema, projectSchema, servicesSchema, signupSchema, teamSchema, testimonialSchema, weAchievedSchema } from '../schema/admin';
 import { UnprocessableEntity } from '../exceptions/validation';
 import jwt from 'jsonwebtoken';
 import AboutModel from '../models/about';
@@ -15,6 +15,7 @@ import ProjectCategoryModel from '../models/projectCategory';
 import Projects from '../models/project';
 import ProjectImage from '../models/projectImage';
 import ProjectCategory from '../models/projectCategory';
+import WeAchieved from '../models/weAchieved';
 const JWT_SECRET = process.env.JWT_SECRET_KEY || "12sawegg23grr434"; // Fallback to a hardcoded secret if not in env
 
 
@@ -785,3 +786,102 @@ export const viewProjects = async (req: Request, res: Response, next: NextFuncti
   }
 };
 
+
+export const weAchieved
+= async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+  const validation = weAchievedSchema.safeParse(req.body);
+
+  // If validation fails, throw a custom error
+  if (!validation.success) {
+    return next(new UnprocessableEntity(validation.error.errors, 'Validation Error'));
+  }
+
+  // Destructure the data from the validated body
+  const { title, subTitle,date} = req.body;
+
+
+  const files = req.files as { [fieldname: string]: Express.Multer.File[] };
+  const image = files['image'] ? files['image'][0].path : ''; 
+  // Create a new "About" record in the database
+  const newWeAchieved = await WeAchieved.create({
+    title,
+    subTitle,
+    date,
+    image,
+  });
+
+  return res.status(201).json({ message: 'We Achieved created successfully', admin: newWeAchieved });
+};
+
+export const viewWeAchieved = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+  const WeAchievedRecords = await WeAchieved.findAll();
+  return res.status(200).json({ message: 'Fetched We Achieved records successfully', data: WeAchievedRecords });
+};
+
+
+
+// Update API
+export const updateWeAchieved = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+  const { id } = req.params; // Get the ID of the record from the URL parameters
+  const validation = weAchievedSchema.safeParse(req.body);
+
+  // If validation fails, throw a custom error
+  if (!validation.success) {
+    return next(new UnprocessableEntity(validation.error.errors, 'Validation Error'));
+  }
+  
+  const  WeAchievedRecord = await WeAchieved.findByPk(id);
+
+  // If record not found, return error
+  if (!WeAchievedRecord) {
+    return next(new BadRequestException('testimonial record not found', ErrorCode.WEACHIEVED_RECORD_NOT_FOUND));
+  }
+
+  // Destructure the data from the validated body
+  const { title,subTitle,date} = req.body;
+
+  const files = req.files as { [fieldname: string]: Express.Multer.File[] };
+  const image = files['image'] ? files['image'][0].path : '';
+
+  WeAchievedRecord.title = title || WeAchievedRecord.title;
+  WeAchievedRecord.subTitle = subTitle || WeAchievedRecord.subTitle;
+  WeAchievedRecord.date = date || WeAchievedRecord.date;
+  WeAchievedRecord.image = image || WeAchievedRecord.image;
+
+  // Save the updated record
+  const updatedWeAchievedRecord = await WeAchievedRecord.save();
+
+  return res.status(200).json({ message: 'We Achieved Record updated successfully', admin: updatedWeAchievedRecord });
+};
+
+
+
+// Delete API
+export const deleteWeAchieved = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+  const { id } = req.params; // Get the ID of the record from the URL parameters
+
+  const deletedCount = await WeAchieved.destroy({
+    where: { id }, // Delete the record by ID
+  });
+
+  if (deletedCount === 0) {
+    return next(new BadRequestException('We Achieved Record record not found', ErrorCode.WEACHIEVED_RECORD_NOT_FOUND));
+   
+  }
+
+  return res.status(200).json({ message: 'We Achieved deleted successfully' });
+};
+
+// View by ID API (Fetch a specific About record by ID)
+export const viewWeAchievedById = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+  const { id } = req.params; // Get the ID of the record from the URL parameters
+
+  const WeAchievedRecords = await WeAchieved.findByPk(id); // Find the record by primary key
+
+  if (!WeAchievedRecords) {
+    return next(new BadRequestException(`We Achieved Records record with ID ${id} not found`, ErrorCode.WEACHIEVED_RECORD_NOT_FOUND));
+    
+  }
+
+  return res.status(200).json({ message: 'Fetched We Achieved Records record successfully', data: WeAchievedRecords });
+};
