@@ -40,9 +40,9 @@ const uploadSeo = multer({
 // Compress image with an initial resize and limited quality adjustment
 const compressImage = async (filePath: string): Promise<string> => {
     const compressedPath = filePath.replace(path.extname(filePath), '.webp'); // Replace original extension with .webp
-    const targetSize = 25 * 1024; // 25 KB target
+    const targetSize = 100 * 1024; // 25 KB target
     const maxWidth = 800; // Resize to max width if larger, reducing compression load
-    let quality = 50;
+    let quality = 80;
 
     const image = sharp(filePath);
     const metadata = await image.metadata();

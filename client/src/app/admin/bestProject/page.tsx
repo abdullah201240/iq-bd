@@ -7,7 +7,7 @@ import DefaultLayout from "@/components/Layouts/DefaultLayout";
 
 
 
-const ClientTable = dynamic(() => import('@/components/Tables/ClientTable'), {
+const BestProjectTable = dynamic(() => import('@/components/Tables/BestProjectTable'), {
     ssr: false, // Disable SSR for this component
 });
 
@@ -69,7 +69,7 @@ export default function Home() {
 
             if (formData.image) form.append('image', formData.image);  // Corrected key for video file
 
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/createClient`, {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/createBestProject`, {
                 method: 'POST',
                 headers: {
                     Authorization: `Bearer ${storedUserInfo}`,
@@ -116,7 +116,7 @@ export default function Home() {
                 <div className="bg-gray-100 py-12">
                     <div className="max-w-3xl mx-auto bg-white border-2 border-[#F17B21] rounded-lg shadow-lg p-8">
                         <div className="text-center">
-                            <h2 className="text-3xl font-bold text-black">Client</h2>
+                            <h2 className="text-3xl font-bold text-black">Best Project</h2>
                         </div>
 
                         <form onSubmit={handleSubmit} className="mt-10">
@@ -160,7 +160,7 @@ export default function Home() {
 
 
                 {/* <TeamTable/> */}
-                <ClientTable />
+                <BestProjectTable />
 
             </DefaultLayout>
         </>

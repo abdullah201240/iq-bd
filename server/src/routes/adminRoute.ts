@@ -1,5 +1,5 @@
 import express from 'express';
-import { aboutUs, category, createClientHandler, createProject, deleteAbout, deleteCategory, deleteClient, deleteServices, deleteTeam, deleteTestimonial, deleteWeAchieved, services, team, testimonial, updateAbout, updateServices, updateTeam, updateTestimonial, updateWeAchieved, viewAbout, viewAboutById, viewCategory, viewCategoryById, viewClient, viewContacts, viewProjects, viewServices, viewServicesById, viewTeam, viewTeamById, viewTestimonial, viewTestimonialById, viewWeAchieved, viewWeAchievedById, weAchieved } from '../controllers/adminController'; // Adjust the import path as needed
+import { aboutUs, category, createBestProject, createClientHandler, createProject, deleteAbout, deleteBestProject, deleteCategory, deleteClient, deleteServices, deleteTeam, deleteTestimonial, deleteWeAchieved, services, team, testimonial, updateAbout, updateServices, updateTeam, updateTestimonial, updateWeAchieved, viewAbout, viewAboutById, viewBestProject, viewCategory, viewCategoryById, viewClient, viewContacts, viewProjects, viewServices, viewServicesById, viewTeam, viewTeamById, viewTestimonial, viewTestimonialById, viewWeAchieved, viewWeAchievedById, weAchieved } from '../controllers/adminController'; // Adjust the import path as needed
 import { errorHandler } from '../error-handler';
 import authMiddleware from '../middleware/auth';
 import { compressImageMiddlewareSeo, uploadSeo } from '../middleware/uploadSeo';
@@ -174,6 +174,22 @@ router.get('/viewClient',authMiddleware, errorHandler(viewClient));
 
 
 router.delete('/deleteClient/:id', authMiddleware,errorHandler(deleteClient));
+
+
+router.post('/createBestProject', 
+  authMiddleware, 
+  uploadSeo.fields([ 
+    { name: 'image', maxCount: 1 }
+  ]),
+  compressImageMiddlewareSeo,
+  errorHandler(createBestProject)  
+);
+
+
+router.get('/viewBestProject',authMiddleware, errorHandler(viewBestProject));
+
+
+router.delete('/deleteBestProject/:id', authMiddleware,errorHandler(deleteBestProject));
 
 
 export default router;

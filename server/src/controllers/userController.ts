@@ -12,6 +12,7 @@ import ContactsModel from '../models/contact';
 import ProjectImage from '../models/projectImage';
 import WeAchieved from '../models/weAchieved';
 import Client from '../models/client';
+import BestProject from '../models/bestProject';
 
 // View by ID API (Fetch a specific About record by ID)
 export const viewAboutById = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
@@ -167,4 +168,12 @@ export const viewClient = async (req: Request, res: Response, next: NextFunction
     attributes: ['id','image']
   });
   return res.status(200).json({ message: 'Fetched  Client records successfully', data: viewClientRecords });
+};
+
+export const viewBestProject = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+  const viewClientRecords = await BestProject.findAll({
+
+    attributes: ['id','image']
+  });
+  return res.status(200).json({ message: 'Fetched  Best Project records successfully', data: viewClientRecords });
 };

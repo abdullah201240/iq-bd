@@ -1,3 +1,4 @@
+import BestProject from '@/components/BestProject';
 import ClientsSection from '@/components/ClientsSection';
 import TeamMember from '@/components/TeamMember';
 import WeAchieved from '@/components/WeAchieved';
@@ -21,6 +22,7 @@ export default function Home() {
       <AboutUs/>
       <Services/>
       <WeOffer/>
+      <BestProject/>
       <Cart />
       <WeAchieved/>
       <ClientsSection/>
