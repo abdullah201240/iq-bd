@@ -9,6 +9,7 @@ import { title } from 'process';
 import { contactsSchema } from '../schema/admin';
 import { UnprocessableEntity } from '../exceptions/validation';
 import ContactsModel from '../models/contact';
+import ProjectImage from '../models/projectImage';
 
 // View by ID API (Fetch a specific About record by ID)
 export const viewAboutById = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
@@ -129,4 +130,19 @@ export const contacts
   });
 
   return res.status(201).json({ message: 'Contacts created successfully', user: newContacts });
+};
+
+export const viewAllProjectImage = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+  try {
+    const projectImages = await ProjectImage.findAll({
+      attributes: ['id', 'imageName'] // Only include the 'id' and 'imageName' fields
+    });
+    
+    return res.status(200).json({
+      message: 'Project Images records fetched successfully',
+      data: projectImages
+    });
+  } catch (error) {
+    next(error); // Ensure to handle any errors that occur during the DB query
+  }
 };

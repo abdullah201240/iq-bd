@@ -1,3 +1,6 @@
+import ClientsSection from '@/components/ClientsSection';
+import TeamMember from '@/components/TeamMember';
+import WeAchieved from '@/components/WeAchieved';
 import dynamic from 'next/dynamic';
 
 const Cart = dynamic(() => import('@/components/Cart'));
@@ -19,6 +22,9 @@ export default function Home() {
       <Services/>
       <WeOffer/>
       <Cart />
+      <WeAchieved/>
+      <ClientsSection/>
+      <TeamMember/>
       <Footer/>
     </div>
   );

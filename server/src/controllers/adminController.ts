@@ -691,7 +691,7 @@ export const createProject = async (req: Request, res: Response, next: NextFunct
   console.log("oakau")
 
 
-    console.log(req.body)
+    console.log(req.files)
   
     // Validate the incoming request body
     const validation = projectSchema.safeParse(req.body);
@@ -784,3 +784,4 @@ export const viewProjects = async (req: Request, res: Response, next: NextFuncti
     });
   }
 };
+
