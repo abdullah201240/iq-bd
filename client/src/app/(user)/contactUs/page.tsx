@@ -5,6 +5,7 @@ import dynamic from 'next/dynamic';
 // AboutUsTitle and Footer are static, so we can import them normally
 import ServicesTitle from '@/components/ServicesTitle';
 import ServiceArea from '@/components/ServiceArea';
+import Whatsapp from '@/components/Whatsapp';
 
 // Dynamically load other components that are not critical for initial rendering
 
@@ -32,6 +33,8 @@ export default function Home() {
       {/* Dynamically loaded components */}
       <ContactForm />
       <ContactMap/>
+      <Whatsapp/>
+
       <br></br>
      
     </div>

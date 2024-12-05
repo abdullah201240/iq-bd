@@ -6,6 +6,7 @@ import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Footer from "@/components/Footer";
+import Whatsapp from "@/components/Whatsapp";
 
 interface Service {
     title: string;
@@ -70,10 +71,8 @@ export default function Page() {
   </div>
 </div>
 <Footer/>
-      
+<Whatsapp/>
 
-      {/* Display Post ID */}
-      <p>Post: {id}</p>
     </div>
   );
 }

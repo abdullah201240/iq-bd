@@ -1,8 +1,8 @@
 import ClientsSection from '@/components/ClientsSection';
 import TeamMember from '@/components/TeamMember';
 import WeAchieved from '@/components/WeAchieved';
+import Whatsapp from '@/components/Whatsapp';
 import dynamic from 'next/dynamic';
-
 const Cart = dynamic(() => import('@/components/Cart'));
 const HeroSection = dynamic(() => import('@/components/HeroSection'));
 const AboutUs = dynamic(() => import('@/components/AboutUs'));
@@ -26,6 +26,9 @@ export default function Home() {
       <ClientsSection/>
       <TeamMember/>
       <Footer/>
+      <Whatsapp/>
+      
+
     </div>
   );
 }

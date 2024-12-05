@@ -1,6 +1,7 @@
 import Footer from '@/components/Footer'
 import Navbar from '@/components/Nabvar'
 import ServicesTitle from '@/components/ServicesTitle'
+import Whatsapp from '@/components/Whatsapp'
 import React from 'react'
 
 export default function page() {
@@ -20,6 +21,8 @@ export default function page() {
 
 
       <Footer/>
+      <Whatsapp/>
+
 
       
     </div>
