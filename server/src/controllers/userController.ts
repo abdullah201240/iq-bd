@@ -72,9 +72,7 @@ export const viewTeam = async (req: Request, res: Response, next: NextFunction):
 export const viewServices = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
   const servicesRecords = await ServicesModel(req.app.get('sequelize')).findAll();
 
-  if (!servicesRecords || servicesRecords.length === 0) {
-    return next(new BadRequestException('Services record not found', ErrorCode.SERVICES_RECORD_NOT_FOUND));
-  }
+ 
     // Map through the records and extract the necessary fields (if needed)
     const teams = servicesRecords.map((record) => ({
       id: record.id,

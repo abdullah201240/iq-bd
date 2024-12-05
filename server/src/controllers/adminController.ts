@@ -595,10 +595,6 @@ export const deleteServices  = async (req: Request, res: Response, next: NextFun
 export const viewServices = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
   const servicesRecords = await ServicesModel(req.app.get('sequelize')).findAll();
 
-  if (!servicesRecords || servicesRecords.length === 0) {
-    return next(new BadRequestException('Services record not found', ErrorCode.SERVICES_RECORD_NOT_FOUND));
-  }
-
   return res.status(200).json({ message: 'Fetched Services records successfully', data: servicesRecords });
 };
 // View by ID API (Fetch a specific About record by ID)
