@@ -13,6 +13,7 @@ import ProjectImage from '../models/projectImage';
 import WeAchieved from '../models/weAchieved';
 import Client from '../models/client';
 import BestProject from '../models/bestProject';
+import Story from '../models/story';
 
 // View by ID API (Fetch a specific About record by ID)
 export const viewAboutById = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
@@ -177,3 +178,11 @@ export const viewBestProject = async (req: Request, res: Response, next: NextFun
   });
   return res.status(200).json({ message: 'Fetched  Best Project records successfully', data: viewClientRecords });
 };
+
+
+export const viewStory = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+  const viewStoryRecords = await Story.findAll({
+    attributes: ['id','link']
+  });
+  return res.status(200).json({ message: 'Fetched  Story records successfully', data: viewStoryRecords });
+  };

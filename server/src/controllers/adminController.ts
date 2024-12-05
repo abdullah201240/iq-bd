@@ -18,6 +18,7 @@ import ProjectCategory from '../models/projectCategory';
 import WeAchieved from '../models/weAchieved';
 import Client from '../models/client';
 import BestProject from '../models/bestProject';
+import Story from '../models/story';
 const JWT_SECRET = process.env.JWT_SECRET_KEY || "12sawegg23grr434"; // Fallback to a hardcoded secret if not in env
 
 
@@ -964,4 +965,41 @@ if (deletedCount === 0) {
 }
 
 return res.status(200).json({ message: 'BestProject deleted successfully' });
+};
+
+
+
+
+
+export const createStory = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+
+  const {link}= req.body
+  
+  // Create a new client record in the database using the Client model
+  const newLink = await Story.create({
+    link,
+  });
+
+  return res.status(201).json({ message: 'Link created successfully', client: newLink });
+
+};
+
+export const viewStory = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+const viewStoryRecords = await Story.findAll();
+return res.status(200).json({ message: 'Fetched  Story records successfully', data: viewStoryRecords });
+};
+// Delete API
+export const deleteStory = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+const { id } = req.params; // Get the ID of the record from the URL parameters
+
+const deletedCount = await Story.destroy({
+  where: { id }, // Delete the record by ID
+});
+
+if (deletedCount === 0) {
+  return next(new BadRequestException('Story record not found', ErrorCode.CLIENT_RECORD_NOT_FOUND));
+ 
+}
+
+return res.status(200).json({ message: 'Story deleted successfully' });
 };
