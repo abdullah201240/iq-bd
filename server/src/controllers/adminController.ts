@@ -16,6 +16,7 @@ import Projects from '../models/project';
 import ProjectImage from '../models/projectImage';
 import ProjectCategory from '../models/projectCategory';
 import WeAchieved from '../models/weAchieved';
+import Client from '../models/client';
 const JWT_SECRET = process.env.JWT_SECRET_KEY || "12sawegg23grr434"; // Fallback to a hardcoded secret if not in env
 
 
@@ -884,4 +885,41 @@ export const viewWeAchievedById = async (req: Request, res: Response, next: Next
   }
 
   return res.status(200).json({ message: 'Fetched We Achieved Records record successfully', data: WeAchievedRecords });
+};
+
+
+
+
+export const createClientHandler = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+
+    const files = req.files as { [fieldname: string]: Express.Multer.File[] };
+    const image = files['image'] ? files['image'][0].path : ''; 
+    
+    // Create a new client record in the database using the Client model
+    const newClient = await Client.create({
+      image,
+    });
+
+    return res.status(201).json({ message: 'Client created successfully', client: newClient });
+  
+};
+
+export const viewClient = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+  const viewClientRecords = await Client.findAll();
+  return res.status(200).json({ message: 'Fetched  Client records successfully', data: viewClientRecords });
+};
+// Delete API
+export const deleteClient = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+  const { id } = req.params; // Get the ID of the record from the URL parameters
+
+  const deletedCount = await Client.destroy({
+    where: { id }, // Delete the record by ID
+  });
+
+  if (deletedCount === 0) {
+    return next(new BadRequestException('Client Record record not found', ErrorCode.CLIENT_RECORD_NOT_FOUND));
+   
+  }
+
+  return res.status(200).json({ message: 'Client deleted successfully' });
 };

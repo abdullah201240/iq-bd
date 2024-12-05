@@ -11,6 +11,7 @@ import { UnprocessableEntity } from '../exceptions/validation';
 import ContactsModel from '../models/contact';
 import ProjectImage from '../models/projectImage';
 import WeAchieved from '../models/weAchieved';
+import Client from '../models/client';
 
 // View by ID API (Fetch a specific About record by ID)
 export const viewAboutById = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
@@ -158,4 +159,12 @@ export const viewWeAchieved = async (req: Request, res: Response, next: NextFunc
   
 
   return res.status(200).json({ message: 'Fetched We Achieved records successfully', data: WeAchievedRecords });
+};
+
+export const viewClient = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+  const viewClientRecords = await Client.findAll({
+
+    attributes: ['id','image']
+  });
+  return res.status(200).json({ message: 'Fetched  Client records successfully', data: viewClientRecords });
 };

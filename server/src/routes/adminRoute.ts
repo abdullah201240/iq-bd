@@ -1,5 +1,5 @@
 import express from 'express';
-import { aboutUs, category, createProject, deleteAbout, deleteCategory, deleteServices, deleteTeam, deleteTestimonial, deleteWeAchieved, services, team, testimonial, updateAbout, updateServices, updateTeam, updateTestimonial, updateWeAchieved, viewAbout, viewAboutById, viewCategory, viewCategoryById, viewContacts, viewProjects, viewServices, viewServicesById, viewTeam, viewTeamById, viewTestimonial, viewTestimonialById, viewWeAchieved, viewWeAchievedById, weAchieved } from '../controllers/adminController'; // Adjust the import path as needed
+import { aboutUs, category, createClientHandler, createProject, deleteAbout, deleteCategory, deleteClient, deleteServices, deleteTeam, deleteTestimonial, deleteWeAchieved, services, team, testimonial, updateAbout, updateServices, updateTeam, updateTestimonial, updateWeAchieved, viewAbout, viewAboutById, viewCategory, viewCategoryById, viewClient, viewContacts, viewProjects, viewServices, viewServicesById, viewTeam, viewTeamById, viewTestimonial, viewTestimonialById, viewWeAchieved, viewWeAchievedById, weAchieved } from '../controllers/adminController'; // Adjust the import path as needed
 import { errorHandler } from '../error-handler';
 import authMiddleware from '../middleware/auth';
 import { compressImageMiddlewareSeo, uploadSeo } from '../middleware/uploadSeo';
@@ -159,5 +159,21 @@ compressImageMiddlewareSeo,
 errorHandler(updateWeAchieved));
 
 router.delete('/deleteWeAchieved/:id', authMiddleware,errorHandler(deleteWeAchieved));
+
+router.post('/createClient', 
+  authMiddleware, 
+  uploadSeo.fields([ 
+    { name: 'image', maxCount: 1 }
+  ]),
+  compressImageMiddlewareSeo,
+  errorHandler(createClientHandler)  
+);
+
+
+router.get('/viewClient',authMiddleware, errorHandler(viewClient));
+
+
+router.delete('/deleteClient/:id', authMiddleware,errorHandler(deleteClient));
+
 
 export default router;
