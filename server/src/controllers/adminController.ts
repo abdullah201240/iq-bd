@@ -999,3 +999,17 @@ if (deletedCount === 0) {
 
 return res.status(200).json({ message: 'Story deleted successfully' });
 };
+
+export const createBlog = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+
+  const files = req.files as { [fieldname: string]: Express.Multer.File[] };
+  const image = files['image'] ? files['image'][0].path : ''; 
+  
+  // Create a new client record in the database using the Client model
+  const newClient = await BestProject.create({
+    image,
+  });
+
+  return res.status(201).json({ message: 'Client created successfully', client: newClient });
+
+};

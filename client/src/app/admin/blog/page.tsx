@@ -163,7 +163,7 @@ export default function Home() {
                                 </div>
                             </div>
 
-                            <div className="mb-6">
+                            <div className="mb-8" >
                                 <label htmlFor="discription" className="block text-gray-900 font-semibold mb-2">
                                     Description
                                 </label>
@@ -173,6 +173,7 @@ export default function Home() {
                                     
                                 />
                             </div>
+                        
 
                             <button
                                 type="submit"
