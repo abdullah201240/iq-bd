@@ -3,7 +3,7 @@ import bcrypt from 'bcryptjs';
 import AdminModel from '../models/admin'; // Adjust the import path as needed
 import { BadRequestException } from '../exceptions/bad-requests';
 import { ErrorCode } from '../exceptions/root';
-import { aboutSchema, categorySchema, loginSchema, projectSchema, servicesSchema, signupSchema, teamSchema, testimonialSchema, weAchievedSchema } from '../schema/admin';
+import { aboutSchema, blogSchema, categorySchema, loginSchema, projectSchema, servicesSchema, signupSchema, teamSchema, testimonialSchema, weAchievedSchema } from '../schema/admin';
 import { UnprocessableEntity } from '../exceptions/validation';
 import jwt from 'jsonwebtoken';
 import AboutModel from '../models/about';
@@ -1002,6 +1002,11 @@ return res.status(200).json({ message: 'Story deleted successfully' });
 };
 
 export const createBlog = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+  const validation = blogSchema.safeParse(req.body);
+  if (!validation.success) {
+    return next(new UnprocessableEntity(validation.error.errors, 'Validation Error'));
+  }
+
  const{title,description} = req.body
   const files = req.files as { [fieldname: string]: Express.Multer.File[] };
   const image = files['image'] ? files['image'][0].path : ''; 
@@ -1015,4 +1020,22 @@ export const createBlog = async (req: Request, res: Response, next: NextFunction
 
   return res.status(201).json({ message: 'Blog created successfully', client: newBlog });
 
+};
+
+export const viewBlog = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+  const viewBlogRecords = await Blog.findAll();
+  return res.status(200).json({ message: 'Fetched  Blog records successfully', data: viewBlogRecords });
+  };
+  
+  export const deleteBlog = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+    const { id } = req.params; // Get the ID of the record from the URL parameters
+    
+    const deletedCount = await Blog.destroy({
+      where: { id }, // Delete the record by ID
+    });
+    if (deletedCount === 0) {
+      return next(new BadRequestException('Blog record not found', ErrorCode.CLIENT_RECORD_NOT_FOUND));
+     
+    }
+    return res.status(200).json({ message: 'Blog deleted successfully' });
 };

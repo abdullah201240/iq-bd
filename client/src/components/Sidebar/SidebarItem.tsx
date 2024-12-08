@@ -2,20 +2,37 @@ import React from "react";
 import Link from "next/link";
 import SidebarDropdown from "@/components/Sidebar/SidebarDropdown";
 import { usePathname } from "next/navigation";
+interface SidebarChildItem {
+  route: string;
+  label: string;
+}
 
-const SidebarItem = ({ item, pageName, setPageName }: any) => {
+interface SidebarItem {
+  route: string;
+  label: string;
+  icon?: React.ReactNode; // If the icon is a React element
+  children?: SidebarChildItem[]; // Nested children if present
+}
+
+interface SidebarItemProps {
+  item: SidebarItem;
+  pageName: string;
+  setPageName: (name: string) => void; // Function to update page name
+}
+
+const SidebarItem: React.FC<SidebarItemProps> = ({ item, pageName, setPageName }) => {
   const handleClick = () => {
     const updatedPageName =
       pageName !== item.label.toLowerCase() ? item.label.toLowerCase() : "";
-    return setPageName(updatedPageName);
+    setPageName(updatedPageName);
   };
 
   const pathname = usePathname();
 
-  const isActive = (item: any) => {
+  const isActive = (item: SidebarItem): boolean => {
     if (item.route === pathname) return true;
     if (item.children) {
-      return item.children.some((child: any) => isActive(child));
+      return item.children.some((child) => isActive(child as SidebarItem));
     }
     return false;
   };

@@ -14,6 +14,7 @@ import WeAchieved from '../models/weAchieved';
 import Client from '../models/client';
 import BestProject from '../models/bestProject';
 import Story from '../models/story';
+import Blog from '../models/blog';
 
 // View by ID API (Fetch a specific About record by ID)
 export const viewAboutById = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
@@ -184,3 +185,32 @@ export const viewStory = async (req: Request, res: Response, next: NextFunction)
   });
   return res.status(200).json({ message: 'Fetched  Story records successfully', data: viewStoryRecords });
   };
+  
+  export const viewBlog = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+    const viewBlogRecords = await Blog.findAll({
+      attributes: ['id','title','description','image']
+    });
+    return res.status(200).json({ message: 'Fetched  Blog records successfully', data: viewBlogRecords });
+    };
+
+    export const viewBlogByid = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+      const { id } = req.params; // Get the ID of the record from the URL parameters
+    
+      const blogRecord = await Blog.findByPk(id); // Find the record by primary key
+    
+      if (!blogRecord) {
+        return next(new BadRequestException(`blog Record record with ID ${id} not found`, ErrorCode.SERVICES_RECORD_NOT_FOUND));
+        
+      }
+    
+        // Map through the records and extract the necessary fields (if needed)
+        const blog = {
+          title: blogRecord.title,
+         
+          description: blogRecord.description,
+          image: blogRecord.image,
+        };
+        // Send the response with the teams
+        res.json(blog);
+    };
+    

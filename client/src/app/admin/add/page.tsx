@@ -5,7 +5,7 @@ export default function Home() {
       <>
         <DefaultLayout>
 
-
+<h1>okay</h1>
             
         
         </DefaultLayout>

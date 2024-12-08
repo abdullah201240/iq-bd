@@ -9,7 +9,7 @@ const HeroSection = dynamic(() => import('@/components/HeroSection'));
 const AboutUs = dynamic(() => import('@/components/AboutUs'));
 const WeOffer = dynamic(() => import('@/components/WeOffer'));
 const Footer = dynamic(() => import('@/components/Footer'));
-const Navbar = dynamic(() => import('@/components/Nabvar'));
+const Navbar = dynamic(() => import('@/components/Navbar'));
 
 const Services = dynamic(() => import('@/components/Services'));
 

@@ -1,5 +1,5 @@
 import Footer from '@/components/Footer'
-import Navbar from '@/components/Nabvar'
+import Navbar from '@/components/Navbar'
 import ServicesTitle from '@/components/ServicesTitle'
 import Whatsapp from '@/components/Whatsapp'
 import React from 'react'

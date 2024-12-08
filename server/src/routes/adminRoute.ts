@@ -1,5 +1,5 @@
 import express from 'express';
-import { aboutUs, category, createBestProject, createClientHandler, createProject, createStory, deleteAbout, deleteBestProject, deleteCategory, deleteClient, deleteServices, deleteStory, deleteTeam, deleteTestimonial, deleteWeAchieved, services, team, testimonial, updateAbout, updateServices, updateTeam, updateTestimonial, updateWeAchieved, viewAbout, viewAboutById, viewBestProject, viewCategory, viewCategoryById, viewClient, viewContacts, viewProjects, viewServices, viewServicesById, viewStory, viewTeam, viewTeamById, viewTestimonial, viewTestimonialById, viewWeAchieved, viewWeAchievedById, weAchieved } from '../controllers/adminController'; // Adjust the import path as needed
+import { aboutUs, category, createBestProject, createBlog, createClientHandler, createProject, createStory, deleteAbout, deleteBestProject, deleteBlog, deleteCategory, deleteClient, deleteServices, deleteStory, deleteTeam, deleteTestimonial, deleteWeAchieved, services, team, testimonial, updateAbout, updateServices, updateTeam, updateTestimonial, updateWeAchieved, viewAbout, viewAboutById, viewBestProject, viewBlog, viewCategory, viewCategoryById, viewClient, viewContacts, viewProjects, viewServices, viewServicesById, viewStory, viewTeam, viewTeamById, viewTestimonial, viewTestimonialById, viewWeAchieved, viewWeAchievedById, weAchieved } from '../controllers/adminController'; // Adjust the import path as needed
 import { errorHandler } from '../error-handler';
 import authMiddleware from '../middleware/auth';
 import { compressImageMiddlewareSeo, uploadSeo } from '../middleware/uploadSeo';
@@ -13,7 +13,7 @@ router.post('/about',
     { name: 'homeImage', maxCount: 1 },
     { name: 'image', maxCount: 1 }
   ]),
-  compressImageMiddlewareSeo,
+  
   errorHandler(aboutUs)  
 );
 // Route for updating an existing About record by ID
@@ -22,7 +22,6 @@ router.put('/about/:id',  uploadSeo.fields([
     { name: 'image', maxCount: 1 }
   ]),
   authMiddleware,
-  compressImageMiddlewareSeo,
   errorHandler(updateAbout));
 
 // Route for deleting an About record by ID
@@ -181,7 +180,6 @@ router.post('/createBestProject',
   uploadSeo.fields([ 
     { name: 'image', maxCount: 1 }
   ]),
-  compressImageMiddlewareSeo,
   errorHandler(createBestProject)  
 );
 
@@ -201,6 +199,17 @@ router.get('/viewStory',authMiddleware, errorHandler(viewStory));
 
 
 router.delete('/deleteStory/:id', authMiddleware,errorHandler(deleteStory));
+
+router.post('/createBlog', 
+  authMiddleware, 
+  uploadSeo.fields([ 
+    { name: 'image', maxCount: 1 }
+  ]),
+  compressImageMiddlewareSeo,
+  errorHandler(createBlog)  
+);
+router.get('/viewBlog',authMiddleware, errorHandler(viewBlog));
+router.delete('/deleteBlog/:id', authMiddleware,errorHandler(deleteBlog));
 
 
 export default router;

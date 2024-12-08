@@ -1,6 +1,6 @@
 "use client";
 
-import Navbar from "@/components/Nabvar";
+import Navbar from "@/components/Navbar";
 import ServicesTitle from "@/components/ServicesTitle";
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";

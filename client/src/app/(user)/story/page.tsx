@@ -1,7 +1,7 @@
 "use client";
 
 import Footer from '@/components/Footer';
-import Navbar from '@/components/Nabvar'; // Ensure the component name is correct
+import Navbar from '@/components/Navbar'; // Ensure the component name is correct
 import ServicesTitle from '@/components/ServicesTitle';
 import React, { useEffect, useState } from 'react';
 
