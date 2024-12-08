@@ -116,5 +116,11 @@ const weAchievedSchema = z.object({
 
 });
 
-export { weAchievedSchema,projectSchema,categorySchema, contactsSchema,signupSchema,servicesSchema,teamSchema, loginSchema,aboutSchema ,testimonialSchema};
+const blogSchema = z.object({
+  title: z.string(), 
+  description: z.string(),   
+
+});
+
+export {blogSchema, weAchievedSchema,projectSchema,categorySchema, contactsSchema,signupSchema,servicesSchema,teamSchema, loginSchema,aboutSchema ,testimonialSchema};
 

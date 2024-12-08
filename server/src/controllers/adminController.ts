@@ -19,6 +19,7 @@ import WeAchieved from '../models/weAchieved';
 import Client from '../models/client';
 import BestProject from '../models/bestProject';
 import Story from '../models/story';
+import Blog from '../models/blog';
 const JWT_SECRET = process.env.JWT_SECRET_KEY || "12sawegg23grr434"; // Fallback to a hardcoded secret if not in env
 
 
@@ -1001,15 +1002,17 @@ return res.status(200).json({ message: 'Story deleted successfully' });
 };
 
 export const createBlog = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
-
+ const{title,description} = req.body
   const files = req.files as { [fieldname: string]: Express.Multer.File[] };
   const image = files['image'] ? files['image'][0].path : ''; 
   
   // Create a new client record in the database using the Client model
-  const newClient = await BestProject.create({
+  const newBlog = await Blog.create({
     image,
+    title,
+    description
   });
 
-  return res.status(201).json({ message: 'Client created successfully', client: newClient });
+  return res.status(201).json({ message: 'Blog created successfully', client: newBlog });
 
 };
