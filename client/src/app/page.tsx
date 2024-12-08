@@ -1,4 +1,5 @@
 import BestProject from '@/components/BestProject';
+import Blog from '@/components/Blog';
 import ClientsSection from '@/components/ClientsSection';
 import TeamMember from '@/components/TeamMember';
 import WeAchieved from '@/components/WeAchieved';
@@ -26,7 +27,9 @@ export default function Home() {
       <Cart />
       <WeAchieved/>
       <ClientsSection/>
+
       <TeamMember/>
+      <Blog/>
       <Footer/>
       <Whatsapp/>
       
