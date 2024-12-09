@@ -4,7 +4,6 @@
 
 import { ChangeEvent, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import DefaultLayout from "@/components/Layouts/DefaultLayout";
 export default function Home() {
   const router = useRouter();
   const [formData, setFormData] = useState({
@@ -149,7 +148,7 @@ export default function Home() {
 
     return (
       <>
-        <DefaultLayout>
+      
 
         <div className="bg-gray-100 py-12">
         <div className="max-w-3xl mx-auto bg-white border-2 border-[#F17B21] rounded-lg shadow-lg p-8">
@@ -297,8 +296,7 @@ export default function Home() {
        
       </div>
             
-        
-        </DefaultLayout>
+     
       </>
     );
   }
