@@ -125,7 +125,7 @@ const jobSchema = z.object({
   deadline: z.string(),
   position: z.string(),
   location: z.string(),
-  phone: z.string(),
+  experience: z.string(),
   description: z.string(),
   salary: z.string(),
   vacancies: z.string(),

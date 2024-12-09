@@ -21,7 +21,7 @@ export default function Home() {
         location: '',
         description: '',
         salary: '',
-        phone: '',
+        experience: '',
         vacancies: '',
         keyResponsibilities: '',
         skillsExperience: '',
@@ -95,7 +95,7 @@ export default function Home() {
             form.append('description', formData.description);
             form.append('deadline', formData.deadline);
             form.append('salary', formData.salary);
-            form.append('phone', formData.phone);
+            form.append('experience', formData.experience);
             form.append('location', formData.location);
             form.append('vacancies', formData.vacancies);
             form.append('keyResponsibilities', formData.keyResponsibilities);
@@ -181,15 +181,15 @@ export default function Home() {
                                 />
                             </div>
                             <div className="w-1/2">
-                                <label htmlFor="Phone" className="block text-gray-900 font-semibold mb-2">
-                                    Phone
+                                <label htmlFor="Experience" className="block text-gray-900 font-semibold mb-2">
+                                Experience
                                 </label>
                                 <input
-                                    id="phone"
+                                    id="experience"
                                     type="text"
-                                    name="phone"
+                                    name="experience"
                                     required
-                                    value={formData.phone}
+                                    value={formData.experience}
                                     onChange={(e) => handleChange(e.target.value, 'phone')}
                                     placeholder="Phone"
                                     className="w-full p-4 rounded-md border border-gray-400 focus:border-[#F17B21] focus:ring-2 focus:ring-[#F17B21] focus:outline-none placeholder-gray-600 text-gray-900"

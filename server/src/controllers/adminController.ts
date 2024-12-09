@@ -1049,7 +1049,7 @@ export const createJob = async (req: Request, res: Response, next: NextFunction)
     return next(new UnprocessableEntity(validation.error.errors, 'Validation Error'));
   }
 
- const{deadline,position,location,phone,salary,vacancies,keyResponsibilities,skillsExperience,description} = req.body
+ const{deadline,position,location,experience,salary,vacancies,keyResponsibilities,skillsExperience,description} = req.body
 
   
   // Create a new client record in the database using the Client model
@@ -1057,7 +1057,7 @@ export const createJob = async (req: Request, res: Response, next: NextFunction)
     deadline,
     position,
     location,
-    phone,
+    experience,
     salary,
     vacancies,
     keyResponsibilities,
@@ -1075,3 +1075,52 @@ export const viewJob = async (req: Request, res: Response, next: NextFunction): 
     order: [['createdAt', 'DESC']], // Assuming 'createdAt' is the field for creation date
   });  return res.status(200).json({ message: 'Fetched  Job records successfully', data: viewJobRecords });
   };
+  export const deleteJob = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+    const { id } = req.params; // Get the ID of the record from the URL parameters
+    
+    const deletedCount = await Job.destroy({
+      where: { id }, // Delete the record by ID
+    });
+    if (deletedCount === 0) {
+      return next(new BadRequestException('Job record not found', ErrorCode.JOB_RECORD_NOT_FOUND));
+     
+    }
+    return res.status(200).json({ message: 'Job deleted successfully' });
+};
+
+export const updateJob = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+
+  console.log(req.body)
+  const { id } = req.params; // Get the ID of the record from the URL parameters
+  const validation = jobSchema.safeParse(req.body);
+
+  // If validation fails, throw a custom error
+  if (!validation.success) {
+    return next(new UnprocessableEntity(validation.error.errors, 'Validation Error'));
+  }
+  
+  const  JobRecord = await Job.findByPk(id);
+
+  // If record not found, return error
+  if (!JobRecord) {
+    return next(new BadRequestException('Job record not found', ErrorCode.JOB_RECORD_NOT_FOUND));
+  }
+
+  // Destructure the data from the validated body
+  const{deadline,position,location,experience,salary,vacancies,keyResponsibilities,skillsExperience,description} = req.body
+
+  JobRecord.deadline = deadline || JobRecord.deadline;
+  JobRecord.position = position || JobRecord.position;
+  JobRecord.location = location || JobRecord.location;
+  JobRecord.experience = experience || JobRecord.experience;
+  JobRecord.salary = salary || JobRecord.salary;
+  JobRecord.vacancies = vacancies || JobRecord.vacancies;
+  JobRecord.keyResponsibilities = keyResponsibilities || JobRecord.keyResponsibilities;
+  JobRecord.skillsExperience = skillsExperience || JobRecord.skillsExperience;
+  JobRecord.description = description || JobRecord.description;
+
+  // Save the updated record
+  const updatedJobRecord = await JobRecord.save();
+
+  return res.status(200).json({ message: 'Job record updated successfully', job: updatedJobRecord });
+};

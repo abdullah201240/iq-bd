@@ -7,7 +7,7 @@ export interface JobAttributes {
     deadline: string;
     position: string;
     location: string;
-    phone: string;
+    experience: string;
     description: string;
     salary: string;
     vacancies: string;
@@ -24,7 +24,7 @@ class Job extends Model<JobAttributes, JobCreationAttributes> implements JobAttr
     public deadline!: string;
     public position!: string;
     public location!: string;
-    public phone!: string;
+    public experience!: string;
     public description!: string;
     public salary!: string;
     public vacancies!: string;
@@ -55,7 +55,7 @@ Job.init(
             type: DataTypes.STRING, // Matches the location field in the interface
             allowNull: false,
         },
-        phone: {
+        experience: {
             type: DataTypes.STRING, // Matches the phone field in the interface
             allowNull: false,
         },

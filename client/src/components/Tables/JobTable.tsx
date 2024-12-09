@@ -9,7 +9,7 @@ interface Job {
     deadline: string;
     position: string;
     location: string;
-    phone: string;
+    experience: string;
     salary: string;
     vacancies: string;
     keyResponsibilities: string;
@@ -30,7 +30,7 @@ const JobTable = () => {
         deadline: '',
         position: '',
         location: '',
-        phone: '',
+        experience: '',
         salary: '',
         vacancies: '',
         keyResponsibilities: '',
@@ -151,18 +151,20 @@ const JobTable = () => {
             router.push('/admin/login');
             return;
         }
-
-        const formData = new FormData();
-        formData.append('deadline', formValues.deadline);
-        formData.append('position', formValues.position);
-        formData.append('location', formValues.location);
-        formData.append('phone', formValues.phone);
-        formData.append('salary', formValues.salary);
-        formData.append('vacancies', formValues.vacancies);
-        formData.append('keyResponsibilities', formValues.keyResponsibilities);
-        formData.append('skillsExperience', formValues.skillsExperience);
-        formData.append('description', formValues.description);
-
+    
+        // Directly use the form values as an object
+        const jobData = {
+            deadline: formValues.deadline,
+            position: formValues.position,
+            location: formValues.location,
+            experience: formValues.experience,
+            salary: formValues.salary,
+            vacancies: formValues.vacancies,
+            keyResponsibilities: formValues.keyResponsibilities,
+            skillsExperience: formValues.skillsExperience,
+            description: formValues.description,
+        };
+    
         try {
             const response = await fetch(
                 `${process.env.NEXT_PUBLIC_API_URL}/admin/job/${formValues.id}`,
@@ -170,11 +172,12 @@ const JobTable = () => {
                     method: 'PUT',
                     headers: {
                         Authorization: `Bearer ${storedUserInfo}`,
+                        'Content-Type': 'application/json',
                     },
-                    body: formData,
+                    body: JSON.stringify(jobData), // Send the data as JSON
                 }
             );
-
+    
             if (response.ok) {
                 const updatedJob = await response.json();
                 const updatedJobs = teams.map((job) =>
@@ -189,6 +192,7 @@ const JobTable = () => {
             console.error('Error updating job:', error);
         }
     };
+    
 
     return (
         <div className="rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default sm:px-7.5 xl:pb-1">
@@ -210,7 +214,13 @@ const JobTable = () => {
                     </div>
                     <div className="p-2.5 text-center xl:p-5">
                         <h5 className="text-sm font-medium uppercase xsm:text-base">
-                            Phone
+                        Experience
+                        </h5>
+                    </div>
+                    <div className="p-2.5 text-center xl:p-5">
+                        <h5 className="text-sm font-medium uppercase xsm:text-base">
+                        Vacancies
+
                         </h5>
                     </div>
                     <div className="hidden p-2.5 text-center sm:block xl:p-5">
@@ -246,7 +256,10 @@ const JobTable = () => {
                                 <p className="text-black">{job.location}</p>
                             </div>
                             <div className="flex items-center justify-center p-2.5 xl:p-5">
-                                <p className="text-black">{job.phone}</p>
+                                <p className="text-black">{job.experience}</p>
+                            </div>
+                            <div className="flex items-center justify-center p-2.5 xl:p-5">
+                                <p className="text-black">{job.vacancies}</p>
                             </div>
                             <div className="hidden items-center justify-center p-2.5 xl:flex xl:p-5">
                                 <p className="text-black">{job.deadline}</p>
@@ -325,9 +338,9 @@ const JobTable = () => {
                 />
                 <input
                     type="text"
-                    placeholder="Phone"
-                    value={formValues.phone}
-                    onChange={(e) => setFormValues({ ...formValues, phone: e.target.value })}
+                    placeholder="Experience"
+                    value={formValues.experience}
+                    onChange={(e) => setFormValues({ ...formValues, experience: e.target.value })}
                     className="w-full p-2 border border-gray-300 rounded"
                 />
                 <input
