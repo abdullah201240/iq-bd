@@ -1,5 +1,5 @@
 import express from 'express';
-import {  viewAboutById, viewTeam, viewTestimonial,viewServices, viewServicesByid, contacts, viewAllProjectImage, viewWeAchieved, viewClient, viewBestProject, viewStory, viewBlog, viewBlogByid } from '../controllers/userController'; // Adjust the import path as needed
+import {  viewAboutById, viewTeam, viewTestimonial,viewServices, viewServicesByid, contacts, viewAllProjectImage, viewWeAchieved, viewClient, viewBestProject, viewStory, viewBlog, viewBlogByid, viewJob, viewJobByid } from '../controllers/userController'; // Adjust the import path as needed
 import { errorHandler } from '../error-handler';
 
 const router = express.Router();
@@ -22,5 +22,7 @@ router.get('/viewStory', errorHandler(viewStory));
 router.get('/viewBlog', errorHandler(viewBlog));
 router.get('/blog/:id', errorHandler(viewBlogByid));
 
+router.get('/job', errorHandler(viewJob));
+router.get('/job/:id', errorHandler(viewJobByid));
 
 export default router;

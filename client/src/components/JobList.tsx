@@ -1,34 +1,46 @@
-import React from "react";
+'use client';
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Exp from "@/app/assets/img/Exp.webp"
 import Img from "@/app/assets/img/image19.webp"
 import map from "@/app/assets/img/map-pin.webp"
+import Link from "next/link";
 
+interface Job {
+  id: number;
+  position: string;
+  location: string;
+  experience: string;
+  salary: string;
+  deadline: string;
+}
 
 export default function JobList() {
-  const jobList = [
-    {
-      title: "Frontend Developer",
-      location: "IQ Architects Ltd, House- 141 (4A, Lane- 01, Dhaka 1206",
-      experience: "2-3 Years",
-      salary: "$60,000 - $80,000",
-      applyEndDate: "December 31, 2024",
-    },
-    {
-      title: "Backend Engineer",
-      location: "IQ Architects Ltd, House- 141 (4A, Lane- 01, Dhaka 1206",
-      experience: "3-5 Years",
-      salary: "$90,000 - $110,000",
-      applyEndDate: "January 15, 2025",
-    },
-    {
-      title: "UI/UX Designer",
-      location: "IQ Architects Ltd, House- 141 (4A, Lane- 01, Dhaka 1206",
-      experience: "1-2 Years",
-      salary: "$40,000 - $60,000",
-      applyEndDate: "December 20, 2024",
-    },
-  ];
+  const [jobList, setJobList] = useState<Job[]>([]); // State to hold the job list
+  const [loading, setLoading] = useState<boolean>(true); // Loading state
+  const [error, setError] = useState<string | null>(null); // Error state
+  
+    // Fetch job list from the API
+    useEffect(() => {
+      const fetchJobs = async () => {
+        try {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/job`); // Replace with your API endpoint
+          if (!response.ok) {
+            throw new Error("Failed to fetch jobs");
+          }
+          const jsonResponse = await response.json();
+          const data: Job[] = jsonResponse.data;
+          setJobList(data); // Update state with job list
+        } catch (err) {
+          setError((err as Error).message); // Handle errors
+        } finally {
+          setLoading(false); // Stop loading spinner
+        }
+      };
+  
+      fetchJobs();
+    }, []);
+    
 
   return (
     <div className="grid max-w-screen-xl px-4 pt-20 pb-8 mx-auto lg:gap-8 xl:gap-0 lg:py-16 bg-white">
@@ -42,61 +54,49 @@ export default function JobList() {
         </p>
 
         <div className="bg-white rounded-lg w-full">
-          {jobList.length > 0 ? (
-            jobList.map((job, index) => (
+        {loading ? (
+            <p className="text-gray-600 text-center">Loading job openings...</p>
+          ) : error ? (
+            <p className="text-red-600 text-center">{error}</p>
+          ) : jobList.length > 0 ? (
+            jobList.map((job) => (
               <div
-                key={index}
-                className="bg-[#F7F7FF] p-6 w-full mx-auto rounded-lg shadow-md flex justify-between items-center mb-6 hover:shadow-lg transition-shadow"
+              key={job.id}
+              className="bg-[#F7F7FF] p-6 w-full mx-auto rounded-lg shadow-md flex justify-between items-center mb-6 hover:shadow-lg transition-shadow"
               >
                 <div>
                   <h2 className="text-xl font-semibold text-gray-800">
 
-                    {job.title}
+                    {job.position}
                   </h2>
-                  <div className="flex items-center mt-2 text-gray-600 text-sm space-x-4">
+                  <div className="flex flex-col md:flex-row items-start md:items-center mt-2 text-gray-600 text-sm space-y-4 md:space-y-0 md:space-x-4">
                     <span className="flex items-center">
-                     <Image
-                     src={map}
-                     alt="map"
-                     width={30}
-                     height={30}
-                     
-                     
-                     />
+                      <Image src={map} alt="map" width={30} height={30} />
                       <span className="ml-2 text-lg">{job.location}</span>
-                      </span>
-                    <span className="flex items-center">
-                    <Image
-                     src={Exp}
-                     alt="exp"
-                     width={30}
-                     height={30}
-                     
-                     
-                     />
-                     <span className="ml-2 text-lg">{job.experience}</span>
-                      
                     </span>
                     <span className="flex items-center">
-                    <Image
-                     src={Img}
-                     alt="Img"
-                     width={30}
-                     height={30}
-                     
-                     
-                     />
-                      <span className="ml-2 text-lg ">{job.salary}</span>
-                      </span>
+                      <Image src={Exp} alt="exp" width={30} height={30} />
+                      <span className="ml-2 text-lg">{job.experience}</span>
+                    </span>
+                    <span className="flex items-center">
+                      <Image src={Img} alt="Img" width={30} height={30} />
+                      <span className="ml-2 text-lg">{job.salary}</span>
+                    </span>
                   </div>
+
                 </div>
                 <div className="text-right">
                   <p className="text-gray-500 text-sm">
-                    Apply By: <span className="font-medium">{job.applyEndDate}</span>
+                    Apply By: <span className="font-medium">{job.deadline}</span>
                   </p>
+                  <Link   href={`/careers/${job.id}`} 
+                  
+                  >
                   <button className="mt-2 px-4 py-2 bg-purple-700 text-white rounded-lg hover:bg-purple-800 transition-colors">
-                    View & Apply
+                  View & Apply
                   </button>
+                  </Link>
+                  
                 </div>
               </div>
             ))

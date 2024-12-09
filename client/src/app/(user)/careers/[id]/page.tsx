@@ -3,15 +3,67 @@ import Navbar from '@/components/Navbar';
 import Footer from "@/components/Footer";
 import Whatsapp from "@/components/Whatsapp";
 import { useParams } from "next/navigation";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ApplyFrom from '@/components/ApplyFrom';
+
+interface Job {
+  id: number;
+  position: string;
+  location: string;
+  experience: string;
+  description: string;
+  salary: string;
+  deadline: string;
+  vacancies: string;
+  keyResponsibilities: string;
+  skillsExperience: string;
+}
 
 export default function Page() {
   const params = useParams();
   const id = params?.id; // Safely access the 'id' parameter
 
+  // State to store job details and loading state
+  const [jobDetails, setJobDetails] = useState<Job | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
   // State to toggle between job details and apply form
   const [showApplyForm, setShowApplyForm] = useState(false);
+
+  useEffect(() => {
+    const fetchJobDetails = async () => {
+      try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/job/${id}`);
+        const data = await response.json();
+  
+        if (response.ok) {
+          setJobDetails(data.data);
+        } else {
+          setError(data.message || "Failed to fetch job details");
+        }
+      } catch {
+        setError("An error occurred while fetching job details");
+      } finally {
+        setLoading(false);
+      }
+    };
+  
+    if (id) {
+      fetchJobDetails();
+    }
+  }, [id]);
+  
+
+  // Handle loading state
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  // Handle error state
+  if (error) {
+    return <div>{error}</div>;
+  }
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
@@ -33,53 +85,38 @@ export default function Page() {
               <div className="p-6 space-y-4 m-4">
                 <div className="flex items-center gap-4">
                   <span className="font-bold text-gray-700">Position:</span>
-                  <p className="text-gray-600">Graphic Designer</p>
+                  <p className="text-gray-600">{jobDetails?.position}</p>
                 </div>
                 <div className="flex items-center gap-4">
                   <span className="font-bold text-gray-700">Location:</span>
-                  <p className="text-gray-600">Baridara DOHS</p>
+                  <p className="text-gray-600">{jobDetails?.location}</p>
                 </div>
                 <div className="flex items-center gap-4">
                   <span className="font-bold text-gray-700">Deadline:</span>
-                  <p className="text-gray-600">20/09/2024</p>
+                  <p className="text-gray-600">{jobDetails?.deadline}</p>
                 </div>
                 <div className="flex items-center gap-4">
                   <span className="font-bold text-gray-700">Salary:</span>
-                  <p className="text-gray-600">18,000 - 25,000 BDT/Month</p>
+                  <p className="text-gray-600">{jobDetails?.salary}</p>
                 </div>
                 <div className="flex items-center gap-4">
                   <span className="font-bold text-gray-700">Vacancies:</span>
-                  <p className="text-gray-600">2 Positions</p>
+                  <p className="text-gray-600">{jobDetails?.vacancies}</p>
                 </div>
               </div>
 
               {/* Job Description */}
               <div className="p-6 space-y-4 m-4">
                 <h2 className="text-2xl font-bold text-gray-800">Job Description</h2>
-                <p className="text-gray-600 leading-relaxed">
-                  As a Graphic Designer, you will work within a Product Delivery Team fused with UX, engineering, product, and data talent. You will help the team design beautiful interfaces that solve business challenges for our clients. We work with a number of Tier 1 banks on building web-based applications for AML, KYC, and Sanctions List management workflows. This role is ideal if you are looking to segue your career into the FinTech or Big Data arenas.
-                </p>
+                <p className="text-gray-600 leading-relaxed" dangerouslySetInnerHTML={{ __html: jobDetails?.description || "" }} />
 
                 <h2 className="text-2xl font-bold text-gray-800">Key Responsibilities</h2>
-                <ul className="list-disc list-inside text-gray-600 space-y-2">
-                  <li>Be involved in every step of the product design cycle from discovery to developer handoff and user acceptance testing.</li>
-                  <li>Work with BAs, product managers, and tech teams to lead the Product Design.</li>
-                  <li>Maintain quality of the design process and ensure that when designs are translated into code, they accurately reflect the design specifications.</li>
-                  <li>Accurately estimate design tickets during planning sessions.</li>
-                  <li>Contribute to sketching sessions involving non-designers.</li>
-                  <li>Create, iterate, and maintain UI deliverables including sketch files, style guides, high-fidelity prototypes, micro interaction specifications, and pattern libraries.</li>
-                  <li>Ensure design choices are data-led by identifying assumptions to test each sprint and work with analysts in your team to plan moderated usability test sessions.</li>
-                  <li>Design pixel-perfect responsive UIs and understand that adopting common interface patterns is better for UX than reinventing the wheel.</li>
-                  <li>Present your work to the wider business at Show & Tell sessions.</li>
-                </ul>
+                <ul className="list-disc list-inside text-gray-600 space-y-2" dangerouslySetInnerHTML={{ __html: jobDetails?.keyResponsibilities || "" }} />
+
 
                 <h2 className="text-2xl font-bold text-gray-800">Skills & Experience</h2>
-                <ul className="list-disc list-inside text-gray-600 space-y-2">
-                  <li>You have at least 3 years of experience working as a Product Designer.</li>
-                  <li>You have experience using Sketch and InVision or Framer X.</li>
-                  <li>You have some previous experience working in an agile environment – think two-week sprints.</li>
-                  <li>You are familiar with using Jira and Confluence in your workflow.</li>
-                </ul>
+                <ul className="list-disc list-inside text-gray-600 space-y-2" dangerouslySetInnerHTML={{ __html: jobDetails?.skillsExperience || "" }} />
+
               </div>
 
               {/* Apply Now Button */}
@@ -95,9 +132,7 @@ export default function Page() {
           </div>
         ) : (
             <div className='mt-15'>
-
-            <ApplyFrom /> 
-
+              <ApplyFrom />
             </div>
         )}
       </main>

@@ -15,6 +15,7 @@ import Client from '../models/client';
 import BestProject from '../models/bestProject';
 import Story from '../models/story';
 import Blog from '../models/blog';
+import Job from '../models/job';
 
 // View by ID API (Fetch a specific About record by ID)
 export const viewAboutById = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
@@ -214,3 +215,22 @@ export const viewStory = async (req: Request, res: Response, next: NextFunction)
         res.json(blog);
     };
     
+    export const viewJob = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+      const viewJobRecords = await Job.findAll({
+        order: [['createdAt', 'DESC']], // Assuming 'createdAt' is the field for creation date
+      });  return res.status(200).json({ message: 'Fetched  Job records successfully', data: viewJobRecords });
+      };
+
+      export const viewJobByid = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+        const { id } = req.params;
+        const viewJobRecord = await Job.findByPk(id);
+        if (!viewJobRecord) {
+          return next(new BadRequestException(`blog Record record with ID ${id} not found`, ErrorCode.JOB_RECORD_NOT_FOUND));
+        }
+        return res.status(200).json({
+          message: "Fetched job record successfully",
+          data: viewJobRecord,
+        });
+        };
+
+      
