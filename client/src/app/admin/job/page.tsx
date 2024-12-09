@@ -6,8 +6,8 @@ import { toast } from 'react-hot-toast';
 import ReactEditor from "react-text-editor-kit";
 
 
-// Dynamically importing TeamTable with SSR disabled
-const TeamTable = dynamic(() => import('@/components/Tables/TeamTable'), {
+// Dynamically importing JobTable with SSR disabled
+const JobTable = dynamic(() => import('@/components/Tables/JobTable'), {
     ssr: false, // Disable SSR for this component
 });
 
@@ -294,7 +294,7 @@ export default function Home() {
             </div>
 
             {/* Conditionally render TeamTable */}
-            <TeamTable />
+            <JobTable />
         </>
     );
 }

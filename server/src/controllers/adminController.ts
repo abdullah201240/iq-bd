@@ -1070,4 +1070,8 @@ export const createJob = async (req: Request, res: Response, next: NextFunction)
 };
 
 
-
+export const viewJob = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+  const viewJobRecords = await Job.findAll({
+    order: [['createdAt', 'DESC']], // Assuming 'createdAt' is the field for creation date
+  });  return res.status(200).json({ message: 'Fetched  Job records successfully', data: viewJobRecords });
+  };
