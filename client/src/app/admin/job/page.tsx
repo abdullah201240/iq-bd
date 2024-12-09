@@ -44,6 +44,7 @@ export default function Home() {
                         headers: {
                             Authorization: `Bearer ${storedUserInfo}`,
                         },
+                        
                     }
                 );
 
@@ -100,12 +101,14 @@ export default function Home() {
             form.append('keyResponsibilities', formData.keyResponsibilities);
             form.append('skillsExperience', formData.skillsExperience);
 
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/team`, {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/job`, {
                 method: 'POST',
                 headers: {
                     Authorization: `Bearer ${storedUserInfo}`,
+                    'Content-Type': 'application/json', // Ensure you're sending JSON
+
                 },
-                body: form,
+                body: JSON.stringify(formData), // Send the form data as JSON
             });
 
             if (!response.ok) {
@@ -193,6 +196,7 @@ export default function Home() {
                                 />
                             </div>
                         </div>
+                        <div className="flex gap-4 mb-6">
 
                         <div className="w-1/2 mb-6">
                             <label htmlFor="Salary" className="block text-gray-900 font-semibold mb-2">
@@ -210,7 +214,7 @@ export default function Home() {
                         </div>
 
                         {/* Vacancies */}
-                        <div className="w-full mb-6">
+                        <div className="w-1/2 mb-6">
                             <label htmlFor="vacancies" className="block text-gray-900 font-semibold mb-2">
                                 Vacancies
                             </label>
@@ -223,6 +227,7 @@ export default function Home() {
                                 onChange={(e) => handleChange(e.target.value, 'vacancies')}
                                 className="w-full p-4 rounded-md border border-gray-400 focus:border-[#F17B21] focus:ring-2 focus:ring-[#F17B21] focus:outline-none bg-white text-black"
                             />
+                        </div>
                         </div>
                         <div className="mb-6">
                             <label htmlFor="description" className="block text-gray-900 font-semibold mb-2">

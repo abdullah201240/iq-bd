@@ -121,6 +121,17 @@ const blogSchema = z.object({
   description: z.string(),   
 
 });
+const jobSchema = z.object({
+  deadline: z.string(),
+  position: z.string(),
+  location: z.string(),
+  phone: z.string(),
+  description: z.string(),
+  salary: z.string(),
+  vacancies: z.string(),
+  keyResponsibilities: z.string(),
+  skillsExperience: z.string(),
+});
 
-export {blogSchema, weAchievedSchema,projectSchema,categorySchema, contactsSchema,signupSchema,servicesSchema,teamSchema, loginSchema,aboutSchema ,testimonialSchema};
+export {jobSchema,blogSchema, weAchievedSchema,projectSchema,categorySchema, contactsSchema,signupSchema,servicesSchema,teamSchema, loginSchema,aboutSchema ,testimonialSchema};
 

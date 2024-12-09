@@ -3,7 +3,7 @@ import bcrypt from 'bcryptjs';
 import AdminModel from '../models/admin'; // Adjust the import path as needed
 import { BadRequestException } from '../exceptions/bad-requests';
 import { ErrorCode } from '../exceptions/root';
-import { aboutSchema, blogSchema, categorySchema, loginSchema, projectSchema, servicesSchema, signupSchema, teamSchema, testimonialSchema, weAchievedSchema } from '../schema/admin';
+import { aboutSchema, blogSchema, categorySchema, jobSchema, loginSchema, projectSchema, servicesSchema, signupSchema, teamSchema, testimonialSchema, weAchievedSchema } from '../schema/admin';
 import { UnprocessableEntity } from '../exceptions/validation';
 import jwt from 'jsonwebtoken';
 import AboutModel from '../models/about';
@@ -20,6 +20,7 @@ import Client from '../models/client';
 import BestProject from '../models/bestProject';
 import Story from '../models/story';
 import Blog from '../models/blog';
+import Job from '../models/job';
 const JWT_SECRET = process.env.JWT_SECRET_KEY || "12sawegg23grr434"; // Fallback to a hardcoded secret if not in env
 
 
@@ -1039,3 +1040,34 @@ export const viewBlog = async (req: Request, res: Response, next: NextFunction):
     }
     return res.status(200).json({ message: 'Blog deleted successfully' });
 };
+
+
+export const createJob = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+  console.log(req.body)
+  const validation = jobSchema.safeParse(req.body);
+  if (!validation.success) {
+    return next(new UnprocessableEntity(validation.error.errors, 'Validation Error'));
+  }
+
+ const{deadline,position,location,phone,salary,vacancies,keyResponsibilities,skillsExperience,description} = req.body
+
+  
+  // Create a new client record in the database using the Client model
+  const newJob = await Job.create({
+    deadline,
+    position,
+    location,
+    phone,
+    salary,
+    vacancies,
+    keyResponsibilities,
+    skillsExperience,
+    description,
+  })
+
+  return res.status(201).json({ message: 'Job created successfully', client: newJob });
+
+};
+
+
+
