@@ -21,6 +21,7 @@ import BestProject from '../models/bestProject';
 import Story from '../models/story';
 import Blog from '../models/blog';
 import Job from '../models/job';
+import ApplyList from '../models/applyList';
 const JWT_SECRET = process.env.JWT_SECRET_KEY || "12sawegg23grr434"; // Fallback to a hardcoded secret if not in env
 
 
@@ -1123,4 +1124,27 @@ export const updateJob = async (req: Request, res: Response, next: NextFunction)
   const updatedJobRecord = await JobRecord.save();
 
   return res.status(200).json({ message: 'Job record updated successfully', job: updatedJobRecord });
+};
+
+
+
+export const jobApplyById = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+  try {
+    const { id } = req.params; // Get the ID of the record from the URL parameters
+    // Find records by jobId
+    const jobApplyRecords = await ApplyList.findAll({
+      where: { jobId : id }, // Use jobId to filter the records
+    });
+
+    // Check if no records are found
+    if (jobApplyRecords.length === 0) {
+      return next(new BadRequestException(`Job Apply record with ID ${id} not found`, ErrorCode.WEACHIEVED_RECORD_NOT_FOUND));
+    }
+
+    // Respond with the records
+    return res.status(200).json({ message: 'Fetched job Apply Records successfully', data: jobApplyRecords });
+  } catch (error) {
+    // Handle unexpected errors
+    return next(error);
+  }
 };

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import { useRouter } from 'next/navigation';
 import ReactEditor from "react-text-editor-kit";
+import Link from 'next/link';
 
 interface Job {
     id: number;
@@ -201,7 +202,7 @@ const JobTable = () => {
             </h4>
 
             <div className="flex flex-col text-white">
-                <div className="grid grid-cols-7 rounded-sm bg-gray-2 dark:bg-meta-4 sm:grid-cols-7">
+                <div className="grid grid-cols-8 rounded-sm bg-gray-2 dark:bg-meta-4 sm:grid-cols-8">
                     <div className="p-2.5 xl:p-5">
                         <h5 className="text-sm font-medium uppercase xsm:text-base text-white">
                             Position
@@ -238,12 +239,17 @@ const JobTable = () => {
                             Actions
                         </h5>
                     </div>
+                    <div className="hidden p-2.5 text-center sm:block xl:p-5">
+                        <h5 className="text-sm font-medium uppercase xsm:text-base">
+                            View
+                        </h5>
+                    </div>
                 </div>
 
                 {teams.length > 0 ? (
                     teams.map((job) => (
                         <div
-                            className={`grid grid-cols-7 sm:grid-cols-7 ${teams.indexOf(job) === teams.length - 1
+                            className={`grid grid-cols-8 sm:grid-cols-8 ${teams.indexOf(job) === teams.length - 1
                                 ? ''
                                 : 'border-b border-stroke dark:border-strokedark'
                                 }`}
@@ -280,6 +286,15 @@ const JobTable = () => {
                                 >
                                     <FaTrash />
                                 </button>
+                            </div>
+                            <div className="flex items-center justify-center gap-2 p-2.5 xl:p-5">
+                                <Link href={`/admin/jobs/${job.id}`}>
+                                    <button
+                                        className="px-6 py-2 text-white font-semibold bg-blue-600 rounded-lg hover:bg-blue-700 transition duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+                                    >
+                                        View
+                                    </button>
+                                </Link>
                             </div>
                         </div>
                     ))
