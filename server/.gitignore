@@ -41,3 +41,4 @@ uploads/
 public/uploads/
 # src/config/config.json
 upload/
+uploadPdf/

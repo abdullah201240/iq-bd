@@ -190,8 +190,8 @@ export default function Home() {
                                     name="experience"
                                     required
                                     value={formData.experience}
-                                    onChange={(e) => handleChange(e.target.value, 'phone')}
-                                    placeholder="Phone"
+                                    onChange={(e) => handleChange(e.target.value, 'experience')}
+                                    placeholder="experience"
                                     className="w-full p-4 rounded-md border border-gray-400 focus:border-[#F17B21] focus:ring-2 focus:ring-[#F17B21] focus:outline-none placeholder-gray-600 text-gray-900"
                                 />
                             </div>

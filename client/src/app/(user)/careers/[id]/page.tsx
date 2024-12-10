@@ -36,7 +36,7 @@ export default function Page() {
       try {
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/job/${id}`);
         const data = await response.json();
-  
+
         if (response.ok) {
           setJobDetails(data.data);
         } else {
@@ -48,12 +48,20 @@ export default function Page() {
         setLoading(false);
       }
     };
-  
+
     if (id) {
       fetchJobDetails();
     }
   }, [id]);
-  
+  // Function to check if the deadline has passed
+  const isDeadlinePassed = (): boolean => {
+    if (jobDetails?.deadline) {
+      const currentDate = new Date();
+      const deadlineDate = new Date(jobDetails.deadline);
+      return currentDate > deadlineDate;
+    }
+    return false;
+  };
 
   // Handle loading state
   if (loading) {
@@ -120,23 +128,24 @@ export default function Page() {
               </div>
 
               {/* Apply Now Button */}
-              <div className="p-6 border-t bg-gray-50 flex justify-end">
-                <button
-                  className="px-6 py-3 text-white font-medium bg-blue-500 rounded-lg hover:bg-blue-600 transition duration-200"
-                  onClick={() => setShowApplyForm(true)} // Show apply form on click
-                >
-                  Apply Now
-                </button>
-              </div>
+              {!isDeadlinePassed() && (
+                <div className="p-6 border-t bg-gray-50 flex justify-end">
+                  <button
+                    className="px-6 py-3 text-white font-medium bg-blue-500 rounded-lg hover:bg-blue-600 transition duration-200"
+                    onClick={() => setShowApplyForm(true)} // Show apply form on click
+                  >
+                    Apply Now
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         ) : (
-            <div className='mt-15'>
-              <ApplyFrom />
-            </div>
+          <div className='mt-15'>
+            <ApplyFrom jobId={typeof id === "string" ? id : undefined} />
+          </div>
         )}
       </main>
-
       {/* Footer */}
       <Footer />
 

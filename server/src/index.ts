@@ -72,6 +72,8 @@ app.use(errorMiddleware);
 
 // Serve static files (uploads)
 app.use('/upload', express.static('upload'));
+app.use('/uploadPdf', express.static('uploadPdf'));
+
 
 // Connect to database
 db.authenticate()

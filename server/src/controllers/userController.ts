@@ -16,6 +16,9 @@ import BestProject from '../models/bestProject';
 import Story from '../models/story';
 import Blog from '../models/blog';
 import Job from '../models/job';
+import { applySchema } from '../schema/user';
+import ApplyList from '../models/applyList';
+import { Op } from 'sequelize';
 
 // View by ID API (Fetch a specific About record by ID)
 export const viewAboutById = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
@@ -233,4 +236,37 @@ export const viewStory = async (req: Request, res: Response, next: NextFunction)
         });
         };
 
-      
+        export const applyJob = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+          const validation = applySchema.safeParse(req.body);
+          if (!validation.success) {
+            return next(new UnprocessableEntity(validation.error.errors, 'Validation Error'));
+          }
+        
+         const{name,email,phone,address,education,experience,salary,choosePosition,portfolio,jobId} = req.body
+         if (!req.file) {
+          return res.status(400).json({ message: 'File is required' });
+        }
+        
+        const existingApplication = await ApplyList.findOne({
+          where: {
+            jobId,
+            [Op.or]: [
+              { email },
+              { phone },
+            ],
+          },
+        });
+        if (existingApplication) {
+          return res.status(409).json({ message: 'You have already applied for this job using the same email or phone.' });
+        }
+          
+          // Create a new client record in the database using the Client model
+          const newApply = await ApplyList.create({
+            resume: req.file.filename,
+            name,email,phone,address,education,experience,salary,choosePosition,portfolio,jobId,status: 'Submitted'
+            
+          });
+        
+          return res.status(201).json({ message: 'Apply created successfully', client: newApply });
+        
+        }; 

@@ -1,23 +1,111 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
+import { toast } from "react-hot-toast";
+interface ApplyFromProps {
+  jobId: string | undefined; // Define the prop type
+}
+const ApplyFrom: React.FC<ApplyFromProps> = ({ jobId }) => {
 
-export default function ApplyFrom() {
+  // Form data state
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    address: "",
+    education: "",
+    experience: "",
+    salary: "",
+    choosePosition: "",
+    portfolio: "",
+    resume: null,
+  });
+
+  // Handle input changes
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  // Handle file input changes
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, files } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: files?.[0] || null,
+    }));
+  };
+
+  // Handle form submission
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    // Display loading toast
+    toast.loading("Submitting your application...");
+
+    // Create FormData for file uploads
+    const payload = new FormData();
+    for (const key in formData) {
+      payload.append(key, formData[key as keyof typeof formData] as string | Blob);
+    }
+    // Append jobId to the payload
+  if (jobId) {
+    payload.append("jobId", jobId);
+  }
+   try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/applyJob`, {
+        method: "POST",
+        body: payload,
+      });
+
+      // Check if the response is successful
+      if (response.ok) {
+        toast.dismiss(); // Dismiss the loading toast
+        toast.success("Application submitted successfully!");
+        setFormData({
+          name: "",
+          email: "",
+          phone: "",
+          address: "",
+          education: "",
+          experience: "",
+          salary: "",
+          choosePosition: "",
+          portfolio: "",
+          resume: null,
+        });
+      } 
+      else if(response.status === 409){
+        toast.dismiss();
+        toast.error("You have already applied for this job.");
+      }
+      
+      else {
+        toast.error("Failed to submit application.");
+      }
+    } catch (error) {
+      toast.dismiss();
+      if (error) {
+        toast.error("Error submitting application. Please try again.");
+
+      }
+    }
+  };
+
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50  ">
-     
-      {/* Application Form Section */}
+    <div className="min-h-screen flex flex-col bg-gray-50">
       <main className="flex-grow">
-        <div className="container mx-auto px-4 py-10 pl-40 ">
+        <div className="container mx-auto px-4 py-10 pl-40">
           <div className="w-full bg-white shadow-lg rounded-lg overflow-hidden">
-            {/* Header */}
-            <div className="bg-gradient-to-r from-blue-500 to-teal-500 p-6 text-white ">
+            <div className="bg-gradient-to-r from-blue-500 to-teal-500 p-6 text-white">
               <h1 className="text-3xl font-bold mb-2 m-4">Application Form</h1>
               <p className="text-lg m-4">Fill out the form below to apply for this position.</p>
             </div>
 
-            {/* Form */}
             <div className="p-6 m-4">
-              <form className="space-y-6">
+              <form className="space-y-6" onSubmit={handleSubmit}>
                 {/* Name */}
                 <div>
                   <label htmlFor="name" className="block text-gray-700 font-medium">
@@ -27,8 +115,11 @@ export default function ApplyFrom() {
                     type="text"
                     id="name"
                     name="name"
+                    value={formData.name}
+                    onChange={handleChange}
                     className="w-full mt-2 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     placeholder="Enter your full name"
+                    required
                   />
                 </div>
 
@@ -41,8 +132,11 @@ export default function ApplyFrom() {
                     type="email"
                     id="email"
                     name="email"
+                    value={formData.email}
+                    onChange={handleChange}
                     className="w-full mt-2 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     placeholder="Enter your email"
+                    required
                   />
                 </div>
 
@@ -55,8 +149,11 @@ export default function ApplyFrom() {
                     type="tel"
                     id="phone"
                     name="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
                     className="w-full mt-2 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     placeholder="Enter your phone number"
+                    required
                   />
                 </div>
 
@@ -68,24 +165,27 @@ export default function ApplyFrom() {
                   <textarea
                     id="address"
                     name="address"
+                    value={formData.address}
+                    onChange={handleChange}
                     className="w-full mt-2 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     placeholder="Enter your current address"
                   ></textarea>
                 </div>
 
-                {/* Educational Background */}
+                {/* Education */}
                 <div>
                   <label htmlFor="education" className="block text-gray-700 font-medium">
                     Educational Background:
                   </label>
-                  <textarea
+                  <input
                     id="education"
                     name="education"
+                    value={formData.education}
+                    onChange={handleChange}
                     className="w-full mt-2 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     placeholder="Provide details of your educational background"
-                  ></textarea>
+                  ></input>
                 </div>
-
                 {/* Job Experience */}
                 <div>
                   <label htmlFor="experience" className="block text-gray-700 font-medium">
@@ -95,11 +195,12 @@ export default function ApplyFrom() {
                     type="number"
                     id="experience"
                     name="experience"
+                    value={formData.experience}
+                    onChange={handleChange}
                     className="w-full mt-2 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     placeholder="Enter your job experience in years"
                   />
                 </div>
-
                 {/* Expected Salary */}
                 <div>
                   <label htmlFor="salary" className="block text-gray-700 font-medium">
@@ -109,25 +210,28 @@ export default function ApplyFrom() {
                     type="text"
                     id="salary"
                     name="salary"
+                    value={formData.salary}
+                    onChange={handleChange}
                     className="w-full mt-2 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     placeholder="Enter your expected salary"
                   />
                 </div>
-
                 {/* Why Choose This Position */}
                 <div>
-                  <label htmlFor="why" className="block text-gray-700 font-medium">
+                  <label htmlFor="choosePosition" className="block text-gray-700 font-medium">
                     Why do you choose this position?
                   </label>
                   <textarea
-                    id="why"
-                    name="why"
+                    id="choosePosition"
+                    name="choosePosition"
+                    value={formData.choosePosition}
+                    onChange={handleChange}
                     className="w-full mt-2 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     placeholder="Explain why you're interested in this role"
                   ></textarea>
                 </div>
-                 {/* Portfolio Link */}
-                 <div>
+                {/* Portfolio Link */}
+                <div>
                   <label htmlFor="portfolio" className="block text-gray-700 font-medium">
                     Design Portfolio Link:
                   </label>
@@ -135,11 +239,12 @@ export default function ApplyFrom() {
                     type="url"
                     id="portfolio"
                     name="portfolio"
+                    value={formData.portfolio}
+                    onChange={handleChange}
                     className="w-full mt-2 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     placeholder="Enter the URL to your design portfolio"
                   />
                 </div>
-
                 {/* Attach Resume */}
                 <div>
                   <label htmlFor="resume" className="block text-gray-700 font-medium">
@@ -150,11 +255,11 @@ export default function ApplyFrom() {
                     id="resume"
                     name="resume"
                     accept=".pdf"
+                    onChange={handleFileChange}
                     className="w-full mt-2 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required
                   />
                 </div>
-
-               
 
                 {/* Submit Button */}
                 <div className="text-right">
@@ -170,7 +275,8 @@ export default function ApplyFrom() {
           </div>
         </div>
       </main>
-
     </div>
   );
 }
+export default ApplyFrom;
+

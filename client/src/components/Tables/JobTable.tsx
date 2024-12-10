@@ -24,7 +24,7 @@ const JobTable = () => {
     const [showConfirm, setShowConfirm] = useState<boolean>(false);
     const [deleteId, setDeleteId] = useState<number | null>(null);
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-    const [currentteam, setCurrentteam] = useState<Job | null>(null);
+    const [currentJob, setCurrentJob] = useState<Job | null>(null);
     const [formValues, setFormValues] = useState<Job>({
         id: 0,
         deadline: '',
@@ -139,7 +139,7 @@ const JobTable = () => {
 
     // Handle edit
     const handleEdit = (job: Job) => {
-        setCurrentteam(job);
+        setCurrentJob(job);
         setFormValues(job);
         setIsModalOpen(true);
     };
@@ -151,7 +151,7 @@ const JobTable = () => {
             router.push('/admin/login');
             return;
         }
-    
+
         // Directly use the form values as an object
         const jobData = {
             deadline: formValues.deadline,
@@ -164,7 +164,7 @@ const JobTable = () => {
             skillsExperience: formValues.skillsExperience,
             description: formValues.description,
         };
-    
+
         try {
             const response = await fetch(
                 `${process.env.NEXT_PUBLIC_API_URL}/admin/job/${formValues.id}`,
@@ -177,7 +177,7 @@ const JobTable = () => {
                     body: JSON.stringify(jobData), // Send the data as JSON
                 }
             );
-    
+
             if (response.ok) {
                 const updatedJob = await response.json();
                 const updatedJobs = teams.map((job) =>
@@ -192,7 +192,7 @@ const JobTable = () => {
             console.error('Error updating job:', error);
         }
     };
-    
+
 
     return (
         <div className="rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default sm:px-7.5 xl:pb-1">
@@ -214,12 +214,12 @@ const JobTable = () => {
                     </div>
                     <div className="p-2.5 text-center xl:p-5">
                         <h5 className="text-sm font-medium uppercase xsm:text-base">
-                        Experience
+                            Experience
                         </h5>
                     </div>
                     <div className="p-2.5 text-center xl:p-5">
                         <h5 className="text-sm font-medium uppercase xsm:text-base">
-                        Vacancies
+                            Vacancies
 
                         </h5>
                     </div>
@@ -315,90 +315,97 @@ const JobTable = () => {
                 </div>
             )}
 
+
             {/* Update Job Modal */}
-       {/* Update Job Modal */}
-{isModalOpen && currentteam && (
-    <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50">
-        <div className="bg-white p-6 rounded-lg w-1/2 max-w-4xl max-h-[80vh] overflow-y-auto">
-            <h2 className="text-xl font-semibold text-center mb-4">Update Job</h2>
-            <form onSubmit={handleUpdate} className="space-y-4">
-                <input
-                    type="text"
-                    placeholder="Position"
-                    value={formValues.position}
-                    onChange={(e) => setFormValues({ ...formValues, position: e.target.value })}
-                    className="w-full p-2 border border-gray-300 rounded"
-                />
-                <input
-                    type="text"
-                    placeholder="Location"
-                    value={formValues.location}
-                    onChange={(e) => setFormValues({ ...formValues, location: e.target.value })}
-                    className="w-full p-2 border border-gray-300 rounded"
-                />
-                <input
-                    type="text"
-                    placeholder="Experience"
-                    value={formValues.experience}
-                    onChange={(e) => setFormValues({ ...formValues, experience: e.target.value })}
-                    className="w-full p-2 border border-gray-300 rounded"
-                />
-                <input
-                    type="text"
-                    placeholder="Salary"
-                    value={formValues.salary}
-                    onChange={(e) => setFormValues({ ...formValues, salary: e.target.value })}
-                    className="w-full p-2 border border-gray-300 rounded"
-                />
-                <input
-                    type="text"
-                    placeholder="Vacancies"
-                    value={formValues.vacancies}
-                    onChange={(e) => setFormValues({ ...formValues, vacancies: e.target.value })}
-                    className="w-full p-2 border border-gray-300 rounded"
-                />
+            {isModalOpen && currentJob && (
+                <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50">
+                    <div className="bg-white p-6 rounded-lg w-1/2 max-w-4xl max-h-[80vh] overflow-y-auto">
+                        <h2 className="text-xl font-semibold text-center mb-4">Update Job</h2>
+                        <form onSubmit={handleUpdate} className="space-y-4">
+                            <input
+                                type="text"
+                                placeholder="Position"
+                                value={formValues.position}
+                                onChange={(e) => setFormValues({ ...formValues, position: e.target.value })}
+                                className="w-full p-2 border border-gray-300 rounded"
+                            />
+                            <input
+                                type="text"
+                                placeholder="Location"
+                                value={formValues.location}
+                                onChange={(e) => setFormValues({ ...formValues, location: e.target.value })}
+                                className="w-full p-2 border border-gray-300 rounded"
+                            />
+                            <input
+                                type="text"
+                                placeholder="Experience"
+                                value={formValues.experience}
+                                onChange={(e) => setFormValues({ ...formValues, experience: e.target.value })}
+                                className="w-full p-2 border border-gray-300 rounded"
+                            />
+                            <input
+                                type="text"
+                                placeholder="Salary"
+                                value={formValues.salary}
+                                onChange={(e) => setFormValues({ ...formValues, salary: e.target.value })}
+                                className="w-full p-2 border border-gray-300 rounded"
+                            />
+                            <input
+                                type="text"
+                                placeholder="Vacancies"
+                                value={formValues.vacancies}
+                                onChange={(e) => setFormValues({ ...formValues, vacancies: e.target.value })}
+                                className="w-full p-2 border border-gray-300 rounded"
+                            />
 
-                <ReactEditor
-                    value={formValues.description}
-                    onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormValues({ ...formValues, description: e.target.value })}
-                    mainProps={{ className: "black" }}
-                    placeholder="Enter Job Description"
-                    className="w-full p-2 border border-gray-300 rounded"
-                />
-                <ReactEditor
-                    value={formValues.skillsExperience}
-                    onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormValues({ ...formValues, skillsExperience: e.target.value })}
-                    mainProps={{ className: "black" }}
-                    placeholder="Skills and Experience"
-                    className="w-full p-2 border border-gray-300 rounded"
-                />
-                <ReactEditor
-                    value={formValues.keyResponsibilities}
-                    onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormValues({ ...formValues, keyResponsibilities: e.target.value })}
-                    mainProps={{ className: "black" }}
-                    placeholder="Key Responsibilities"
-                    className="w-full p-2 border border-gray-300 rounded"
-                />
+                            <ReactEditor
+                                value={formValues.description}
+                                onChange={(content: string) =>
+                                    setFormValues({ ...formValues, description: content })
+                                }
+                                mainProps={{ className: "black" }}
+                                placeholder="Enter Job Description"
+                                className="w-full p-2 border border-gray-300 rounded"
+                            />
+                            <ReactEditor
+                                value={formValues.skillsExperience}
+                                onChange={(content: string) =>
+                                    setFormValues({ ...formValues, skillsExperience: content })
+                                }
+                                mainProps={{ className: "black" }}
+                                placeholder="Skills and Experience"
+                                className="w-full p-2 border border-gray-300 rounded"
+                            />
 
-                <div className="flex justify-center gap-4 mt-4">
-                    <button
-                        type="submit"
-                        className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-700"
-                    >
-                        Update
-                    </button>
-                    <button
-                        type="button"
-                        onClick={() => setIsModalOpen(false)}
-                        className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-700"
-                    >
-                        Cancel
-                    </button>
+                            <ReactEditor
+                                value={formValues.keyResponsibilities}
+                                onChange={(content: string) =>
+                                    setFormValues({ ...formValues, keyResponsibilities: content })
+                                }
+                                mainProps={{ className: "black" }}
+                                placeholder="Key Responsibilities"
+                                className="w-full p-2 border border-gray-300 rounded"
+                            />
+
+                            <div className="flex justify-center gap-4 mt-4">
+                                <button
+                                    type="submit"
+                                    className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-700"
+                                >
+                                    Update
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => setIsModalOpen(false)}
+                                    className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-700"
+                                >
+                                    Cancel
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-            </form>
-        </div>
-    </div>
-)}
+            )}
 
         </div>
     );

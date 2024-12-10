@@ -133,5 +133,6 @@ const jobSchema = z.object({
   skillsExperience: z.string(),
 });
 
+
 export {jobSchema,blogSchema, weAchievedSchema,projectSchema,categorySchema, contactsSchema,signupSchema,servicesSchema,teamSchema, loginSchema,aboutSchema ,testimonialSchema};
 
